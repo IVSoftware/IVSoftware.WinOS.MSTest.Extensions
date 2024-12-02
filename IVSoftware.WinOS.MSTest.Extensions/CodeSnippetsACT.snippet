@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets
+    xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>MSTest Actual SU</Title>
+			<Description>MSTest Actual Set Up</Description>
+			<Author>IVSoftware,LLC</Author>
+			<Shortcut>actsu</Shortcut>
+		</Header>
+		<Snippet>
+			<Code Language="CSharp">
+				<![CDATA[				
+string actual, expected;
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>MSTest Actual Clipboard</Title>
+			<Description>Add clipboard listeners.</Description>
+			<Author>IVSoftware,LLC</Author>
+			<Shortcut>act</Shortcut>
+		</Header>
+		<Snippet>
+			<Code Language="CSharp">
+				<![CDATA[actual.ToClipboard();
+				actual.ToClipboardAssert();
+				{ }]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>MSTest Actual Equals</Title>
+			<Description>Get Expected Under Test (EUT) and add clipboard listeners.</Description>
+			<Author>IVSoftware,LLC</Author>
+			<Shortcut>actt</Shortcut>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>eut</ID>
+					<Default>eut</Default>
+				</Literal>
+				<Literal>
+					<ID>msg</ID>
+					<Default>msg</Default>
+				</Literal>
+			</Declarations>
+			<Code Language="CSharp">
+				<![CDATA[actual=$eut$;
+				actual.ToClipboard();
+				actual.ToClipboardAssert("Expecting $msg$");
+				{ }]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

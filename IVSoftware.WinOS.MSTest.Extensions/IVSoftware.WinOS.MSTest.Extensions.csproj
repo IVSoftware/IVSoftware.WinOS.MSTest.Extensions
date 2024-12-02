@@ -1,0 +1,63 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<UseWindowsForms>True</UseWindowsForms>
+		<Title>IVSoftware.WinOS.MSTest</Title>
+		<Description>Streamlines MSTest development by enabling on-the-fly test limit generation.</Description>
+		<PackageTags>windows;winforms;wpf</PackageTags>
+		<RepositoryUrl>https://github.com/IVSoftware/IVSoftware.WinOS.MSTest.Extensions.git</RepositoryUrl>
+		<!--PackageProjectUrl></PackageProjectUrl-->
+		<RootNamespace>IVSoftware.WinOS.MSTest</RootNamespace>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Authors>IVSoftware, Thomas C. Gregor</Authors>
+		<Owner>IVSoftware LLC</Owner>
+		<Copyright>Copyright © 2024 IVSoftware LLC</Copyright>
+		<FileVersion>$(AssemblyVersion)</FileVersion>
+		<Version>$(AssemblyVersion)</Version>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<DebugType>embedded</DebugType>
+		<BaseVersion>1.0.2</BaseVersion>
+		<VersionPrefix>$(BaseVersion)-prerelease</VersionPrefix>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+	
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>C:\Github\_PFX\231130.ivs.pfx</AssemblyOriginatorKeyFile>
+		<DelaySign>false</DelaySign>
+		<!--This guidance seems to be helpful to ensure WinOS NuGet builds as expected-->
+		<IsPackable>true</IsPackable>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+		<SignAssembly>false</SignAssembly>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Images\breaking-on-empty-code-block.png" />
+	  <None Remove="Images\templatized-code-snippet-first-look.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Images\breaking-on-empty-code-block.png" />
+	  <Content Include="Images\templatized-code-snippet-first-look.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="IVSoftware.Portable.Threading" Version="1.3.0-preview3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="IVSoftware.Portable.Disposable" Version="*" />
+	</ItemGroup>
+</Project>
