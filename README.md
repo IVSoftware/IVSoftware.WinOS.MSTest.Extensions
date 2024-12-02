@@ -55,7 +55,7 @@ public void Test_RecordCreate()
 #### Visual Flow Example
 When the templatized 'actt' code snippet is invoked, there are placeholders for "expected under test" and the assert message.
 
-![Templatized Code Snippet - First Look](IVSoftware.WinOS.MSTest.Extensions/Images/templatized-code-snippet-first-look.png)
+![Templatized Code Snippet](https://github.com/IVSoftware/IVSoftware.WinOS.MSTest.Extensions/raw/master/IVSoftware.WinOS.MSTest.Extensions/Images/templatized-code-snippet-first-look.png
 
 In this arbitrary test method, the serialized 'coc' object will be the figure of merit, so the placeholders will be replaced as follows:
 
@@ -81,7 +81,7 @@ public void Test_RecordCreate()
 Note that an empty code block provides a line that will bind to a breakpoint. When the debugger is paused on this line, the clipboard will contain an escaped version of the instance JSON and an assert to compart actual to expected. Before the paste operation, we are paused at the brackets:
 
 
-![Templatized Code Snippet - First Look](IVSoftware.WinOS.MSTest.Extensions/Images/breaking-on-empty-code-block.png)
+![Edit and Continue Breakpoint](https://github.com/IVSoftware/IVSoftware.WinOS.MSTest.Extensions/raw/master/IVSoftware.WinOS.MSTest.Extensions/Images/breaking-on-empty-code-block.png)
 
 Now just CTRL-V to paste the limit before continuing execution on the fly.
 
