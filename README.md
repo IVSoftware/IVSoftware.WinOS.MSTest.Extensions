@@ -38,6 +38,9 @@ The `ToClipboard()` method copies the **actual output** (e.g., a serialized JSON
 #### 2. `ToClipboardAssert()`
 The `ToClipboardAssert()` method copies an **escaped and formatted version** of the output into the clipboard. This version is suitable for direct embedding into your test code as an `expected` test limit. The escaping ensures it is compatible with C# string literals, avoiding errors while preserving readability.
 
+#### 3. `ToClipboardExpect()`
+The `ToClipboardExpect()` method copies an **escaped and formatted version** of the output into the clipboard. This version is suitable for updating expected value without generating a new test limit assert and running the risk of altering its message string.
+
 ### Workflow Example
 
 Below is a demonstration of how the extension methods integrate into the test workflow. The screenshots show the process in action.

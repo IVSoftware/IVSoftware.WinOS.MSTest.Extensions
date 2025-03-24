@@ -62,6 +62,12 @@ namespace IVSoftware.WinOS.MSTest.Extensions
         public static void ToClipboardAssert(this XElement limit, string? message = null) => limit.makeAssert(message).ToClipboard();
 
         /// <summary>
+        /// Copies a generated assertion script for the specified XML element to the clipboard.
+        /// </summary>
+        /// <param name="limit">The XML element to generate an assertion script for.</param>
+        public static void ToClipboardExpecting(this XElement limit, string? message = null) => limit.makeAssert(message).ToClipboard();
+
+        /// <summary>
         /// Converts a string containing XML into a normalized XML string format.
         /// </summary>
         /// <param name="parseableXml">The XML string to normalize.</param>
@@ -108,6 +114,17 @@ Assert.AreEqual(
     expected.NormalizeResult(),
     actual.NormalizeResult(),
     ""{message ?? "Expecting values to match."}""
+);";
+
+        /// <summary>
+        /// Generates an assertion script for the specified XML element.
+        /// </summary>
+        /// <param name="limit">The XML element to generate an assertion script for.</param>
+        /// <returns>A generated assertion script as a string.</returns>
+        private static string makeExpected(this XElement limit, string? message = null) => $@"
+expected = @""
+{limit.ToString().Replace(@"""", @"""""")}
+"";
 );";
         // <summary>
         /// Normalizes a path by removing all preceding directories up to and including the "OnePage" directory.
@@ -208,6 +225,36 @@ Assert.AreEqual(
                 .Select(part => part.Trim())
                 .Where(part => !string.IsNullOrEmpty(part)))
                 .Trim();
+        }
+        public static async Task<DialogResult> MessageBoxAsync(
+            this string message,
+            MessageBoxButtons buttons = MessageBoxButtons.OK,
+            MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1,
+            MessageBoxIcon icon = MessageBoxIcon.None,
+            string caption = "Alert")
+        {
+            return await Task.Run(() =>
+            {
+                var tcs = new TaskCompletionSource<DialogResult>();
+
+                var thread = new Thread(() =>
+                {
+                    try
+                    {
+                        var dialogResult = MessageBox.Show(message, caption, buttons, icon, defaultButton);
+                        tcs.SetResult(dialogResult);
+                    }
+                    catch (Exception ex)
+                    {
+                        tcs.SetException(ex);
+                    }
+                });
+
+                thread.SetApartmentState(ApartmentState.STA);
+                thread.Start();
+
+                return tcs.Task;
+            });
         }
     }
 }

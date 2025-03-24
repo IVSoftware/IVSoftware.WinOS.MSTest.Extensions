@@ -21,7 +21,7 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<DebugType>embedded</DebugType>
-		<BaseVersion>1.0.3</BaseVersion>
+		<BaseVersion>1.0.4</BaseVersion>
 		<VersionPrefix>$(BaseVersion)-prerelease</VersionPrefix>
 	</PropertyGroup>
 	<ItemGroup>
@@ -33,7 +33,7 @@
 	
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
 		<SignAssembly>true</SignAssembly>
-		<AssemblyOriginatorKeyFile>C:\Github\_PFX\231130.ivs.pfx</AssemblyOriginatorKeyFile>
+		<AssemblyOriginatorKeyFile>D:\PFX\231130.ivs.pfx</AssemblyOriginatorKeyFile>
 		<DelaySign>false</DelaySign>
 		<!--This guidance seems to be helpful to ensure WinOS NuGet builds as expected-->
 		<IsPackable>true</IsPackable>
