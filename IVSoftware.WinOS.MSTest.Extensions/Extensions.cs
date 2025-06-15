@@ -67,11 +67,18 @@ namespace IVSoftware.WinOS.MSTest.Extensions
         /// <param name="limit">The string to generate an assertion script for.</param>
         public static void ToClipboardExpected(this string limit) => limit.makeExpected().ToClipboard();
 
+        [Obsolete("Use ToClipboardExpected for consistency with generated output 'expected = '.")]
+        public static void ToClipboardExpecting(this string limit) => limit.ToClipboardExpected();
+
         /// <summary>
         /// Copies an escaped and formatted version of the output for updating a test limit in the code.
         /// </summary>
         /// <param name="limit">The XML element to generate an assertion script for.</param>
         public static void ToClipboardExpected(this XElement limit) => limit.makeAssert().ToClipboard();
+
+
+        [Obsolete("Use ToClipboardExpected for consistency with generated output 'expected = '.")]
+        public static void ToClipboardExpecting(this XElement limit) => limit.ToClipboardExpected();
 
         /// <summary>
         /// Converts a string containing XML into a normalized XML string format.
