@@ -1,9 +1,10 @@
 ## IVSoftware.WinOS.MSTest.Extensions
 
-The **MSTest Clipboard Utilities** package is designed to enhance the testing workflow by providing two primary extension methods:
+The **MSTest Clipboard Utilities** package is designed to enhance the testing workflow by providing three primary extension methods:
 
 1. **`ToClipboard()`**: Copies raw output to the clipboard for inspection or external use.
 2. **`ToClipboardAssert()`**: Copies an escaped and formatted version of the output for direct embedding as a test limit in the code.
+3. **`ToClipboardExpected()`**: Copies an escaped and formatted version of the output for updating a test limit in the code.
 
 Additionally, the package includes optional Visual Studio code snippets that streamline the process of generating test limits on the fly, allowing developers to dynamically craft and validate test assertions during debugging sessions.
 
@@ -38,8 +39,8 @@ The `ToClipboard()` method copies the **actual output** (e.g., a serialized JSON
 #### 2. `ToClipboardAssert()`
 The `ToClipboardAssert()` method copies an **escaped and formatted version** of the output into the clipboard. This version is suitable for direct embedding into your test code as an `expected` test limit. The escaping ensures it is compatible with C# string literals, avoiding errors while preserving readability.
 
-#### 3. `ToClipboardExpect()`
-The `ToClipboardExpect()` method copies an **escaped and formatted version** of the output into the clipboard. This version is suitable for updating expected value without generating a new test limit assert and running the risk of altering its message string.
+#### 3. `ToClipboardExpected()`
+The `ToClipboardExpected()` method copies an **escaped and formatted version** of the output into the clipboard. This version is suitable for updating expected value without generating a new test limit assert and running the risk of altering its message string.
 
 ### Workflow Example
 

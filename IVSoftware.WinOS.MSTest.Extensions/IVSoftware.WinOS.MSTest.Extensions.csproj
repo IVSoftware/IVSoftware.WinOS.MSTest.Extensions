@@ -21,8 +21,8 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<DebugType>embedded</DebugType>
-		<BaseVersion>1.0.4</BaseVersion>
-		<VersionPrefix>$(BaseVersion)-prerelease</VersionPrefix>
+		<BaseVersion>1.0.7</BaseVersion>
+		<VersionPrefix>$(BaseVersion)</VersionPrefix>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Include="..\README.md">

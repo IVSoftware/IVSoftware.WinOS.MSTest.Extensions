@@ -62,10 +62,16 @@ namespace IVSoftware.WinOS.MSTest.Extensions
         public static void ToClipboardAssert(this XElement limit, string? message = null) => limit.makeAssert(message).ToClipboard();
 
         /// <summary>
-        /// Copies a generated assertion script for the specified XML element to the clipboard.
+        /// Copies an escaped and formatted version of the output for updating a test limit in the code.
+        /// </summary>
+        /// <param name="limit">The string to generate an assertion script for.</param>
+        public static void ToClipboardExpected(this string limit) => limit.makeExpected().ToClipboard();
+
+        /// <summary>
+        /// Copies an escaped and formatted version of the output for updating a test limit in the code.
         /// </summary>
         /// <param name="limit">The XML element to generate an assertion script for.</param>
-        public static void ToClipboardExpecting(this XElement limit, string? message = null) => limit.makeAssert(message).ToClipboard();
+        public static void ToClipboardExpected(this XElement limit) => limit.makeAssert().ToClipboard();
 
         /// <summary>
         /// Converts a string containing XML into a normalized XML string format.
@@ -106,6 +112,16 @@ Assert.AreEqual(
         /// </summary>
         /// <param name="limit">The XML element to generate an assertion script for.</param>
         /// <returns>A generated assertion script as a string.</returns>
+        private static string makeExpected(this string limit) => $@"
+expected = @"" 
+{limit.ToString().Replace(@"""", @"""""")}""
+;";
+
+        /// <summary>
+        /// Generates an assertion script for the specified XML element.
+        /// </summary>
+        /// <param name="limit">The XML element to generate an assertion script for.</param>
+        /// <returns>A generated assertion script as a string.</returns>
         private static string makeAssert(this XElement limit, string? message = null) => $@"
 expected = @""
 {limit.ToString().Replace(@"""", @"""""")}
@@ -121,11 +137,12 @@ Assert.AreEqual(
         /// </summary>
         /// <param name="limit">The XML element to generate an assertion script for.</param>
         /// <returns>A generated assertion script as a string.</returns>
-        private static string makeExpected(this XElement limit, string? message = null) => $@"
+        private static string makeExpected(this XElement limit) => $@"
 expected = @""
 {limit.ToString().Replace(@"""", @"""""")}
 "";
 );";
+
         // <summary>
         /// Normalizes a path by removing all preceding directories up to and including the "OnePage" directory.
         /// </summary>
