@@ -1,24 +1,66 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<!-- Multi-targeting: WinForms and MAUI -->
-		<TargetFrameworks>net8.0-windows</TargetFrameworks>
-		<LangVersion>latest</LangVersion>
+		<TargetFramework>net8.0-windows</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<UseWindowsForms>True</UseWindowsForms>
 
-		<!-- Enable WinForms -->
-		<UseWindowsForms>true</UseWindowsForms>
-		<EnableWindowsTargeting>true</EnableWindowsTargeting>
+		<Title>IVSoftware.WinOS.MSTest.Extensions.STA</Title>
+		<Description>Provides deterministic, headless WinForms STA execution for MSTest unit tests. Ideal for testing UI components, STA-required APIs, and isolated Win32 message pump scenarios.</Description>
+		<PackageTags>windows;winforms;mstest;sta;ui-thread</PackageTags>
+
+		<RepositoryUrl>https://github.com/IVSoftware/IVSoftware.WinOS.MSTest.Extensions.git</RepositoryUrl>
+		<!--PackageProjectUrl></PackageProjectUrl-->
+
+		<RootNamespace>IVSoftware.WinOS.MSTest.Extensions.STA</RootNamespace>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Authors>IVSoftware, Thomas C. Gregor</Authors>
+		<Owner>IVSoftware LLC</Owner>
+		<Copyright>Copyright © 2025 IVSoftware LLC</Copyright>
+
+		<FileVersion>$(AssemblyVersion)</FileVersion>
+		<Version>$(AssemblyVersion)</Version>
+
+		<PackageReadmeFile>README-STA.md</PackageReadmeFile>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+
+		<DebugType>embedded</DebugType>
+
+		<!-- Version Strategy -->
+		<BaseVersion>1.0.0</BaseVersion>
+		<VersionPrefix>$(BaseVersion)-local0</VersionPrefix>
 	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
-    <PackageReference Include="MSTest" Version="3.6.4" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include=".\README-STA.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
-  </ItemGroup>
+	<!-- Signed release -->
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>D:\PFX\231130.ivs.pfx</AssemblyOriginatorKeyFile>
+		<DelaySign>false</DelaySign>
+		<IsPackable>true</IsPackable>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+		<SignAssembly>false</SignAssembly>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="IVSoftware.WinOS.MSTest.Extensions" Version="1.0.8" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+		<PackageReference Include="MSTest" Version="3.6.4" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+	</ItemGroup>
 
 </Project>
+
