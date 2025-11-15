@@ -2,9 +2,10 @@
 {
     class SilentRunner : Form
     {
-        public SilentRunner(bool isSilent = true)
+        public SilentRunner() : this(true) { }
+        public SilentRunner(bool isVisible)
         {
-            IsSilent = isSilent;
+            IsSilent = !isVisible;
             StartPosition = FormStartPosition.CenterScreen;
             Size = new Size(500, 300);
         }

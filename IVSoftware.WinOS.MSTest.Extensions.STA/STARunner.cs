@@ -2,7 +2,7 @@
 {
     public class STARunner : IDisposable
     {
-        public STARunner(Type? type = null)
+        public STARunner(bool isVisible, Type? type = null)
         {
             if(type is not null)
             {
@@ -100,6 +100,38 @@
                 }
             }
             _uiThread.Join();
+        }
+
+        public async Task RunAsync(Func<Task> work)
+        {
+            var form = await _tcsFormReady.Task.ConfigureAwait(false);
+
+            var tcs = new TaskCompletionSource();
+
+            try
+            {
+                // Marshal the async work onto the UI thread
+                form.BeginInvoke(new Action(async () =>
+                {
+                    try
+                    {
+                        await work().ConfigureAwait(false);
+                        tcs.SetResult();
+                    }
+                    catch (Exception ex)
+                    {
+                        tcs.SetException(ex);
+                    }
+                }));
+            }
+            catch (ObjectDisposedException)
+            {
+                // The form/thread died before we could dispatch
+                tcs.SetCanceled();
+            }
+
+            // Await the completion on the caller's context
+            await tcs.Task.ConfigureAwait(false);
         }
     }
 }
