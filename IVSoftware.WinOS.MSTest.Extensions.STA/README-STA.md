@@ -146,17 +146,21 @@ This allows full UI behavior without interfering with automated test runs.
 
 ```csharp
 [TestMethod]
-public async Task Test_Countdown()
+public async Task Test_DisposalWithNOOP()
 {
-    using var sta = new STARunner();
+    using var sta = new STARunner(isVisible: true);
 
-    for (int i = 3; i >= 0; i--)
+    await sta.RunAsync(async () =>
     {
-        await Task.Delay(1000);
-
+        sta.MainForm.Text = "Main Form";
+        await Task.CompletedTask;
+    });
+    for (int countdown = 5; countdown >= 0; countdown--)
+    {
+        await Task.Delay(TimeSpan.FromSeconds(1));
         await sta.RunAsync(async () =>
         {
-            sta.MainForm.Text = $"Countdown: {i}";
+            sta.MainForm.Text = $"Main Form - Shutdown in {countdown}";
             await Task.CompletedTask;
         });
     }

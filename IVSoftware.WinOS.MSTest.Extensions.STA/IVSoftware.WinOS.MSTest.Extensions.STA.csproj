@@ -30,7 +30,7 @@
 
 		<!-- Version Strategy -->
 		<BaseVersion>1.0.0</BaseVersion>
-		<VersionPrefix>$(BaseVersion)-local0</VersionPrefix>
+		<VersionPrefix>$(BaseVersion)-local2</VersionPrefix>
 	</PropertyGroup>
 
 	<ItemGroup>

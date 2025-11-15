@@ -10,14 +10,35 @@
             }
             _uiThread = new(() => 
             {
-                if(Activator.CreateInstance(ActivationType) is Form success)
+                if(Activator.CreateInstance(ActivationType, [isVisible]) is Form success)
                 {
                     MainForm = success;
-                    MainForm.HandleCreated += (sender, e) =>
+                    if(MainForm.IsHandleCreated)
+                    {
+                        // Silent mode. Handle already exists.
+                        localOnHandleCreated(MainForm, EventArgs.Empty);
+                    }
+                    else
+                    {
+                        MainForm.HandleCreated += localOnHandleCreated;
+                    }
+                        
+                    Application.Run(MainForm);
+
+                    #region L o c a l F x 
+                    void localOnHandleCreated(object? sender, EventArgs e)
                     {
                         _ = _tcsFormReady.TrySetResult(MainForm);
-                    };
-                    Application.Run(MainForm);
+                        MainForm.BeginInvoke(() =>
+                        {
+                            // For example, if you do have two usings in one test
+                            // method, the second instance might be underneath.
+                            // NOTE: BringToFront has been shown to *not* be up to the tstk.
+                            MainForm.TopMost = true;
+                            MainForm.TopMost = false;
+                        });
+                    }
+                    #endregion L o c a l F x
                 }
                 else
                 {
@@ -27,6 +48,7 @@
             _uiThread.SetApartmentState(ApartmentState.STA);
             _uiThread.Start();
         }
+
         private readonly Thread _uiThread;
         private readonly TaskCompletionSource<Form> _tcsFormReady = new();
 
