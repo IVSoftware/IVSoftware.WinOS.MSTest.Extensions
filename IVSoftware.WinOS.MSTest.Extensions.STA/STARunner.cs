@@ -100,34 +100,6 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA
         }
         Form? _mainForm = null!;
 
-        public void Dispose()
-        {
-            // Wait for MainForm to exist in the first place.
-            var form = _tcsFormReady.Task.Result;
-
-            // PRE-CHECK: Is the form alive enough to accept BeginInvoke?
-            if (form.IsHandleCreated && !form.IsDisposed)
-            {
-                try
-                {
-                    form.BeginInvoke(new Action(() =>
-                    {
-                        // POST-CHECK: The form might have died since posting
-                        if (!form.IsDisposed)
-                        {
-                            form.Close();
-                        }
-                    }));
-                }
-                catch (ObjectDisposedException)
-                {
-                    // The handle was destroyed between the outer check and BeginInvoke.
-                    // Nothing more to do.
-                }
-            }
-            _uiThread.Join();
-        }
-
         public async Task RunAsync(Func<Task> work)
         {
             var form = await _tcsFormReady.Task.ConfigureAwait(false);
@@ -158,6 +130,67 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA
 
             // Await the completion on the caller's context
             await tcs.Task.ConfigureAwait(false);
+        }
+
+        public Task<T> RunAsync<T>(Func<Task<T>> work)
+        {
+            var form = _tcsFormReady.Task;
+
+            var tcs = new TaskCompletionSource<T>();
+
+            form.ContinueWith(_ =>
+            {
+                try
+                {
+                    MainForm.BeginInvoke(new Action(async () =>
+                    {
+                        try
+                        {
+                            var result = await work().ConfigureAwait(false);
+                            tcs.SetResult(result);
+                        }
+                        catch (Exception ex)
+                        {
+                            tcs.SetException(ex);
+                        }
+                    }));
+                }
+                catch (ObjectDisposedException)
+                {
+                    tcs.SetCanceled();
+                }
+            });
+
+            return tcs.Task;
+        }
+
+
+        public void Dispose()
+        {
+            // Wait for MainForm to exist in the first place.
+            var form = _tcsFormReady.Task.Result;
+
+            // PRE-CHECK: Is the form alive enough to accept BeginInvoke?
+            if (form.IsHandleCreated && !form.IsDisposed)
+            {
+                try
+                {
+                    form.BeginInvoke(new Action(() =>
+                    {
+                        // POST-CHECK: The form might have died since posting
+                        if (!form.IsDisposed)
+                        {
+                            form.Close();
+                        }
+                    }));
+                }
+                catch (ObjectDisposedException)
+                {
+                    // The handle was destroyed between the outer check and BeginInvoke.
+                    // Nothing more to do.
+                }
+            }
+            _uiThread.Join();
         }
     }
 }

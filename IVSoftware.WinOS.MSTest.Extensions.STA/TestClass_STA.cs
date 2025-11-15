@@ -62,16 +62,36 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA
                     sta.MainForm.Text = "Main Form";
                     await Task.CompletedTask;
                 });
-                for (int countdown = 5; countdown >= 0; countdown--)
+
+                using (Form toast = await sta.RunAsync(async () =>
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(1));
-                    await sta.RunAsync(async () =>
+                    return await localCreateForm();
+
+                    #region L o c a l F x 
+                    async Task<Form> localCreateForm()
                     {
-                        sta.MainForm.Text = $"Main Form - Shutdown in {countdown}";
-                        builder.Add(sta.MainForm.Text);
-                        Debug.WriteLine($"SilentDisposalWithNOOP: {sta.MainForm.Text}");
                         await Task.CompletedTask;
-                    });
+                        var toast = new Form
+                        {
+                            StartPosition = FormStartPosition.Manual,
+                        };
+                        toast.Show(null);
+                        return toast;
+                    }
+                    #endregion L o c a l F x
+                }))
+                {
+                    for (int countdown = 5; countdown >= 0; countdown--)
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(1));
+                        await sta.RunAsync(async () =>
+                        {
+                            sta.MainForm.Text = $"Main Form - Shutdown in {countdown}";
+                            builder.Add(sta.MainForm.Text);
+                            Debug.WriteLine($"SilentDisposalWithNOOP: {sta.MainForm.Text}");
+                            await Task.CompletedTask;
+                        });
+                    }
                 }
             }
 
