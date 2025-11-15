@@ -146,12 +146,40 @@ Main Form - Shutdown in 0";
             #endregion L o c a l F x
         }
 
+
         [TestMethod]
-        public async Task Test_Monolithic()
+        public async Task Test_MonolithicVisible()
+        {
+            using var sta = new STARunner(isVisible: true);
+
+            await sta.RunAsync(localTestOnStaThread);
+
+            #region L o c a l F x 
+            async Task localTestOnStaThread()
+            {
+                Assert.IsFalse(sta.MainForm.InvokeRequired);
+
+                sta.MainForm.Text = "Main Form";
+
+                // Mutate UI normally
+                for (int countdown = 5; countdown >= 0; countdown--)
+                {
+                    sta.MainForm.Text = $"Main Form - Shutdown in {countdown}";
+                    await Task.Delay(1000); // allowed inside UI callback
+                }
+            }
+            #endregion L o c a l F x
+        }
+
+        [TestMethod]
+        public async Task Test_MonolithicSilent()
         {
             using var sta = new STARunner(isVisible: false);
 
-            await sta.RunAsync(async () =>
+            await sta.RunAsync(localTestOnStaThread);
+
+            #region L o c a l F x 
+            async Task localTestOnStaThread()
             {
                 Assert.IsFalse(sta.MainForm.InvokeRequired);
 
@@ -189,8 +217,8 @@ Main Form - Shutdown in 0";
                     sta.MainForm.Text = $"Main Form - Shutdown in {countdown}";
                     await Task.Delay(1000); // allowed inside UI callback
                 }
-            });
+            };
+            #endregion L o c a l F x
         }
-
     }
 }
