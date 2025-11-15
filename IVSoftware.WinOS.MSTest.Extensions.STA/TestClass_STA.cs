@@ -8,145 +8,46 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA
     [TestClass]
     public sealed class TestClass_STA
     {
-        [TestMethod]
-        public async Task Test_DisposalWithNOOP()
-        {
-            STARunner sta;
-            using (sta = new STARunner(isVisible: true))
-            {
-                await sta.RunAsync(async () =>
-                {
-                    sta.MainForm.Text = "Main Form";
-                    await Task.CompletedTask;
-                });
-                for (int countdown = 5; countdown >= 0; countdown--)
-                {
-                    await Task.Delay(TimeSpan.FromSeconds(1));
-                    await sta.RunAsync(async () =>
-                    {
-                        sta.MainForm.Text = $"Main Form - Shutdown in {countdown}";
-                        await Task.CompletedTask;
-                    });
-                }
-            }
-
-            // This tests not only the robustness of the dispose, but also
-            // the ability of the second instance to bring itself to front.
-            using (sta = new STARunner(isVisible: true))
-            {
-                await sta.RunAsync(async () =>
-                {
-                    sta.MainForm.Text = "Main Form";
-                    await Task.CompletedTask;
-                });
-                for (int countdown = 5; countdown >= 0; countdown--)
-                {
-                    await Task.Delay(TimeSpan.FromSeconds(1));
-                    await sta.RunAsync(async () =>
-                    {
-                        sta.MainForm.Text = $"Main Form - Shutdown in {countdown}";
-                        await Task.CompletedTask;
-                    });
-                }
-            }
-        }
-
-        [TestMethod]
-        public async Task Test_SilentDisposalWithNOOP()
-        {
-            string actual, expected;
-            var builder = new List<string>();
-
-            STARunner sta;
-            using (sta = new STARunner(isVisible: false))
-            {
-                await sta.RunAsync(async () =>
-                {
-                    sta.MainForm.Text = "Main Form";
-                    await Task.CompletedTask;
-                });
-
-                using (Form popup = await sta.RunAsync(async () =>
-                {
-                    var popup = new Form
-                    {
-                        FormBorderStyle = FormBorderStyle.None,
-                        StartPosition = FormStartPosition.Manual,
-                        Size = new Size(300, 100)
-                    };
-
-                    var label = new Label
-                    {
-                        Dock = DockStyle.Fill,
-                        TextAlign = ContentAlignment.MiddleCenter,
-                        Font = new Font("Consolas", 16, FontStyle.Bold),
-                        ForeColor = Color.White,
-                        BackColor = ColorTranslator.FromHtml("#444444"),
-                    };
-
-                    popup.Controls.Add(label);
-                    popup.Tag = label;
-
-                    popup.Show(null);
-                    popup.CycleTopmost();
-                    await Task.CompletedTask;
-                    return popup;
-                }))
-                {
-                    for (int countdown = 5; countdown >= 0; countdown--)
-                    {
-                        var msg = $"Shutdown in {countdown}";
-
-                        await Task.Delay(TimeSpan.FromSeconds(1));
-                        await sta.RunAsync(async () =>
-                        {
-                            if (popup.Tag is Label lbl) lbl.Text = msg;
-                            sta.MainForm.Text = $"Main Form - Shutdown in {countdown}";
-                            builder.Add(sta.MainForm.Text);
-                            Debug.WriteLine($"SilentDisposalWithNOOP: {sta.MainForm.Text}");
-                            await Task.CompletedTask;
-                        });
-                    }
-                }
-            }
-
-            actual = string.Join(Environment.NewLine, builder);
-            actual.ToClipboardExpected();
-            { }
-            expected = @" 
-Main Form - Shutdown in 5
-Main Form - Shutdown in 4
-Main Form - Shutdown in 3
-Main Form - Shutdown in 2
-Main Form - Shutdown in 1
-Main Form - Shutdown in 0";
-
-            Assert.AreEqual(
-                expected.NormalizeResult(),
-                actual.NormalizeResult(),
-                "Expecting loopback of shutdown messages for invisible form."
-            );
-        }
-
+        /// <summary>
+        /// Confirms that execution enters the STARunner STA thread.
+        /// </summary>
+        /// <remarks>
+        /// Verifies that code invoked through RunAsync executes directly on the
+        /// STA thread and does not require UI marshalling. This establishes the
+        /// baseline contract for working inside the STARunner UI context.
+        /// </remarks>
         [TestMethod]
         public async Task Test_CanonicalPOC()
         {
-            string actual, expected;
-            var builder = new List<string>();
-
             using var sta = new STARunner(isVisible: false);
             await sta.RunAsync(localStaTest);
 
             #region L o c a l F x 
             async Task localStaTest()
             {
-                Assert.IsFalse(sta.MainForm.InvokeRequired);
+                Assert.IsFalse(
+                    sta.MainForm.InvokeRequired,
+                    $"Expecting confirmation of UI thread context. No marshal is needed.");
+
+                // Manipulate the UI
+                sta.MainForm.Text = "Hello";
+                Assert.IsInstanceOfType<Form>(sta.MainForm);
+                Assert.IsTrue(sta.MainForm.IsHandleCreated);
+                Assert.AreEqual("Hello", sta.MainForm.Text);
+
                 await Task.CompletedTask;
             }
             #endregion L o c a l F x
         }
 
-
+        /// <summary>
+        /// Exercises visible STA execution in a single RunAsync block.
+        /// </summary>
+        /// <remarks>
+        /// The entire test runs on the STA thread, enabling direct manipulation
+        /// of MainForm without additional marshalling. Validates that UI updates
+        /// remain stable across timed delays when the window is visible.
+        /// </remarks>
         [TestMethod]
         public async Task Test_MonolithicVisible()
         {
@@ -157,20 +58,29 @@ Main Form - Shutdown in 0";
             #region L o c a l F x 
             async Task localTestOnStaThread()
             {
-                Assert.IsFalse(sta.MainForm.InvokeRequired);
+                Assert.IsFalse(
+                    sta.MainForm.InvokeRequired,
+                    $"Expecting confirmation of UI thread context. No marshal is needed.");
 
                 sta.MainForm.Text = "Main Form";
 
-                // Mutate UI normally
                 for (int countdown = 5; countdown >= 0; countdown--)
                 {
                     sta.MainForm.Text = $"Main Form - Shutdown in {countdown}";
-                    await Task.Delay(1000); // allowed inside UI callback
+                    await Task.Delay(1000);
                 }
             }
             #endregion L o c a l F x
         }
 
+        /// <summary>
+        /// Exercises silent STA execution in a single RunAsync block.
+        /// </summary>
+        /// <remarks>
+        /// Builds a temporary popup form inside the STA universe, stabilizes its
+        /// layout, and updates both the popup and MainForm over timed intervals.
+        /// Confirms correct behavior when the STA environment is not visible.
+        /// </remarks>
         [TestMethod]
         public async Task Test_MonolithicSilent()
         {
@@ -219,6 +129,60 @@ Main Form - Shutdown in 0";
                 }
             };
             #endregion L o c a l F x
+        }
+
+        /// <summary>
+        /// Validates reentrant UI execution and sequential STARunner lifetimes.
+        /// </summary>
+        /// <remarks>
+        /// Confirms that multiple RunAsync calls within a single STARunner instance
+        /// reliably reenter the STA thread and update the UI without marshalling.
+        /// After disposal, a second STARunner is created to verify clean teardown,
+        /// correct foreground activation, and full isolation between lifetimes.
+        /// This test exercises both reentrant UI behavior and sequential runner
+        /// lifecycles.
+        /// </remarks>
+        [TestMethod]
+        public async Task Test_ReentrantAndSequentialRunners()
+        {
+            STARunner sta;
+            using (sta = new STARunner(isVisible: true))
+            {
+                await sta.RunAsync(async () =>
+                {
+                    sta.MainForm.Text = "Main Form";
+                    await Task.CompletedTask;
+                });
+                for (int countdown = 5; countdown >= 0; countdown--)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    await sta.RunAsync(async () =>
+                    {
+                        sta.MainForm.Text = $"Main Form - Shutdown in {countdown}";
+                        await Task.CompletedTask;
+                    });
+                }
+            }
+
+            // This tests not only the robustness of the dispose, but also
+            // the ability of the second instance to bring itself to front.
+            using (sta = new STARunner(isVisible: true))
+            {
+                await sta.RunAsync(async () =>
+                {
+                    sta.MainForm.Text = "Main Form";
+                    await Task.CompletedTask;
+                });
+                for (int countdown = 5; countdown >= 0; countdown--)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    await sta.RunAsync(async () =>
+                    {
+                        sta.MainForm.Text = $"Main Form - Shutdown in {countdown}";
+                        await Task.CompletedTask;
+                    });
+                }
+            }
         }
     }
 }

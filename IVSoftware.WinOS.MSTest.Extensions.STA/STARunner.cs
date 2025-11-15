@@ -10,12 +10,24 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA
             {
                 ActivationType = type;
             }
-            _uiThread = new(() => 
+            _uiThread = new(() =>
             {
-                if(Activator.CreateInstance(ActivationType, [isVisible]) is Form success)
+                if (ActivationType.GetConstructor([typeof(bool)]) is { } ctorWithArg)
+                {
+
+                }
+                else if (ActivationType.GetConstructor(Type.EmptyTypes) is { } ctorParameterless)
+                {
+                }
+                else
+                {
+                    throw new InvalidOperationException("policy");
+                }
+
+                if (Activator.CreateInstance(ActivationType, [isVisible]) is Form success)
                 {
                     MainForm = success;
-                    if(MainForm.IsHandleCreated)
+                    if (MainForm.IsHandleCreated)
                     {
                         // Silent mode. Handle already exists.
                         localOnHandleCreated(MainForm, EventArgs.Empty);
@@ -24,7 +36,7 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA
                     {
                         MainForm.HandleCreated += localOnHandleCreated;
                     }
-                        
+
                     Application.Run(MainForm);
 
                     #region L o c a l F x 

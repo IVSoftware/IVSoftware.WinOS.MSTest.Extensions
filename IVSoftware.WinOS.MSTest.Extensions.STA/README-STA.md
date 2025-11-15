@@ -1,86 +1,73 @@
 ## IVSoftware.WinOS.MSTest.Extensions.STA
 
-The STARunner package provides a deterministic, headless Single Threaded Apartment (STA) environment for MSTest. It is designed for scenarios where test code must run on a real WinForms UI thread with a real message pump, including:
-
-- WinForms component testing
-- APIs that require STA affinity
-- UI automation or event sequencing
-- Clipboard, drag-and-drop, and COM-based features
-- Code paths that depend on WindowsFormsSynchronizationContext
-
-By hosting a lightweight WinForms form on a dedicated STA thread, STARunner provides a small, isolated UI universe that behaves like a real desktop message loop.
+STARunner provides a deterministic Single Threaded Apartment (STA) environment for MSTest. It hosts a lightweight WinForms message pump on a dedicated UI thread, giving tests access to real Windows UI semantics when required by WinForms, COM, or synchronization-context–dependent code.
 
 ---
 
-### Why This Exists
+### Test-Driven UI Component Development
 
-Some Windows APIs require:
-
-- the calling thread to be STA
-- an active WinForms message pump
-- a valid UI SynchronizationContext
-- a fully created window handle
-- a running dispatch loop
-
-MSTest does not supply such an environment by default. STARunner fills this gap with a simple pattern:
+Having a test container sandbox for UI components under development accelerates the cycle - as long as the UI thread and message loop are predictable and stable. STARunner provides that environment with minimal syntax overhead.
 
 ```csharp
-using (var sta = new STARunner())
+[TestMethod]
+public async Task Test_CanonicalPOC()
 {
-    await sta.RunAsync(async () =>
+    using var sta = new STARunner(isVisible: false);
+    await sta.RunAsync(localStaTest);
+
+    #region L o c a l F x 
+    async Task localStaTest()
     {
-        // Code here executes on a real WinForms UI thread.
-    });
+        Assert.IsFalse(
+            sta.MainForm.InvokeRequired,
+            $"Expecting confirmation of UI thread context. No marshal is needed.");
+
+        // Manipulate the UI
+        sta.MainForm.Text = "Hello";
+        Assert.IsInstanceOfType<Form>(sta.MainForm);
+        Assert.IsTrue(sta.MainForm.IsHandleCreated);
+        Assert.AreEqual("Hello", sta.MainForm.Text);
+
+        await Task.CompletedTask;
+    }
+    #endregion L o c a l F x
 }
 ```
 
-Everything inside RunAsync executes on the isolated UI thread with proper dispatch, control creation, layout, and event behavior.
+Everything inside `RunAsync` runs on the STA thread with normal WinForms behavior (layout, events, handle creation, etc.). To test your app's Main Form, pass its Type into the constructor of STARunner.
 
 ---
 
-### Critical Setup
+### Project Setup
 
-Your MSTest project must target Windows and enable WinForms:
+Your test project must target Windows and enable WinForms:
 
 ```xml
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net8.0-windows</TargetFramework>
-    <UseWindowsForms>True</UseWindowsForms>
-  </PropertyGroup>
-
-</Project>
+<PropertyGroup>
+  <TargetFramework>net8.0-windows</TargetFramework>
+  <UseWindowsForms>True</UseWindowsForms>
+</PropertyGroup>
 ```
-
-Without this configuration, the WinForms infrastructure required by STARunner cannot initialize.
 
 ---
 
-### Key Features
+### Core Concepts
 
-#### 1. Real WinForms Message Pump
+#### Real Message Pump
+STARunner creates an internal form and calls `Application.Run`, supplying:
+- a UI thread with a message queue  
+- proper synchronization context  
+- predictable control initialization  
 
-STARunner creates an internal UI thread, instantiates a form (typically SilentRunner), and calls Application.Run. This establishes:
-
-- a Windows message queue
-- a valid UI synchronization context
-- handle creation guarantees
-- proper WinForms lifecycle behavior
-
-#### 2. Headless or Visible UI Environment
-
-The default SilentRunner hosts a WinForms form whose handle exists but whose window remains hidden unless surfaced intentionally.
-
-Reveal the window at any time:
+#### Silent or Visible Mode
+By default the form is hidden but alive. You can surface it at any time:
 
 ```csharp
 sta.MainForm.IsSilent = false;
 ```
 
-#### 3. Transparent RunAsync Execution
-
-UI-dependent code is marshaled using BeginInvoke and executed on the UI thread:
+#### RunAsync
+`RunAsync` marshals work onto the STA thread:
 
 ```csharp
 await sta.RunAsync(async () =>
@@ -91,94 +78,77 @@ await sta.RunAsync(async () =>
 });
 ```
 
-#### 4. Deterministic Teardown
-
-At the end of the using block:
-
-- the main form is closed on the UI thread
-- the message pump exits
-- the UI thread unwinds
-- Dispose waits via Join
-
-This prevents leaked threads or lingering pumps.
+#### Deterministic Teardown
+Disposing STARunner closes the form, exits the loop, and joins the thread.  
+No leaked UI threads, no phantom message pumps.
 
 ---
 
-### Basic Usage
+### Example: Direct UI Execution
 
 ```csharp
 [TestMethod]
-public async Task Test_ButtonClick()
-{
-    using var sta = new STARunner();
-
-    await sta.RunAsync(async () =>
-    {
-        var btn = new Button();
-        bool clicked = false;
-
-        btn.Click += (s, e) => clicked = true;
-        btn.PerformClick();
-
-        Assert.IsTrue(clicked);
-        await Task.CompletedTask;
-    });
-}
-```
-
-Everything inside RunAsync runs on a true WinForms UI thread.
-
----
-
-### SilentRunner
-
-SilentRunner is the default form type. It:
-
-- creates its handle even when not visible
-- overrides SetVisibleCore to remain hidden while IsSilent is true
-- can be displayed dynamically for debugging
-
-This allows full UI behavior without interfering with automated test runs.
-
----
-
-### Example: UI Updates Over Time
-
-```csharp
-[TestMethod]
-public async Task Test_DisposalWithNOOP()
+public async Task Test_MonolithicVisible()
 {
     using var sta = new STARunner(isVisible: true);
 
     await sta.RunAsync(async () =>
     {
         sta.MainForm.Text = "Main Form";
-        await Task.CompletedTask;
-    });
-    for (int countdown = 5; countdown >= 0; countdown--)
-    {
-        await Task.Delay(TimeSpan.FromSeconds(1));
-        await sta.RunAsync(async () =>
+
+        for (int n = 5; n >= 0; n--)
         {
-            sta.MainForm.Text = $"Main Form - Shutdown in {countdown}";
-            await Task.CompletedTask;
-        });
-    }
+            sta.MainForm.Text = $"Shutdown in {n}";
+            await Task.Delay(1000);
+        }
+    });
 }
 ```
 
-During execution, MainForm.Text is updated on the UI thread exactly as it would be in a real WinForms application.
+Inside `RunAsync`, the test is effectively a tiny WinForms app.
+
+---
+
+### Example: Popup UI in a Silent Environment
+
+```csharp
+await sta.RunAsync(async () =>
+{
+    var popup = new Form
+    {
+        Size = new Size(300, 100),
+        FormBorderStyle = FormBorderStyle.None
+    };
+
+    var label = new Label
+    {
+        Dock = DockStyle.Fill,
+        TextAlign = ContentAlignment.MiddleCenter
+    };
+
+    popup.Controls.Add(label);
+    popup.Show();
+    popup.PerformLayout();
+    popup.Update();
+
+    for (int n = 5; n >= 0; n--)
+    {
+        label.Text = $"Shutdown in {n}";
+        await Task.Delay(1000);
+    }
+});
+```
 
 ---
 
 ### Summary
 
-IVSoftware.WinOS.MSTest.Extensions.STA provides:
+STARunner supplies:
 
-- a deterministic, isolated STA environment  
-- a headless WinForms message pump  
-- true UI thread semantics (Invoke, events, handles, layout)  
-- a transparent async boundary through RunAsync  
-- safe teardown with zero thread leakage  
+- a dedicated STA UI thread  
+- an isolated WinForms message pump  
+- true handle, layout, and event semantics  
+- transparent async boundaries via `RunAsync`  
+- deterministic teardown  
 
-It is designed for MSTest scenarios that depend on Windows Forms, COM STA components, or UI-thread behavior, without requiring any visible UI unless requested.
+Ideal for MSTest scenarios requiring WinForms behavior, COM STA affinity, or UI-thread–dependent components, without requiring visible UI unless requested.
