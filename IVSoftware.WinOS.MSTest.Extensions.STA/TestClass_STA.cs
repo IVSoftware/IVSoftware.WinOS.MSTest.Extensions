@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace IVSoftware.WinOS.MSTest.Extensions.STA
 {
@@ -128,9 +129,68 @@ Main Form - Shutdown in 0";
         }
 
         [TestMethod]
-        public void Test_Monolithic()
+        public async Task Test_CanonicalPOC()
         {
+            string actual, expected;
+            var builder = new List<string>();
 
+            using var sta = new STARunner(isVisible: false);
+            await sta.RunAsync(localStaTest);
+
+            #region L o c a l F x 
+            async Task localStaTest()
+            {
+                Assert.IsFalse(sta.MainForm.InvokeRequired);
+                await Task.CompletedTask;
+            }
+            #endregion L o c a l F x
         }
+
+        [TestMethod]
+        public async Task Test_Monolithic()
+        {
+            using var sta = new STARunner(isVisible: false);
+
+            await sta.RunAsync(async () =>
+            {
+                Assert.IsFalse(sta.MainForm.InvokeRequired);
+
+                sta.MainForm.Text = "Main Form";
+
+                // Build UI in place
+                var popup = new Form
+                {
+                    Size = new Size(300, 100),
+                    FormBorderStyle = FormBorderStyle.None,
+                    StartPosition = FormStartPosition.Manual,
+                    BackColor = Color.Black
+                };
+
+                var label = new Label
+                {
+                    Dock = DockStyle.Fill,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Font = new Font("Consolas", 16, FontStyle.Bold),
+                    ForeColor = Color.White,
+                    BackColor = ColorTranslator.FromHtml("#444444")
+                };
+
+                popup.Controls.Add(label);
+                popup.Show();
+
+                // Stabilize layout + paint before we ever await
+                popup.PerformLayout();
+                popup.Update();
+
+                // Mutate UI normally
+                for (int countdown = 5; countdown >= 0; countdown--)
+                {
+                    label.Text = $"Shutdown in {countdown}";
+                    sta.MainForm.Text = $"Main Form - Shutdown in {countdown}";
+                    await Task.Delay(1000); // allowed inside UI callback
+                }
+            });
+        }
+
     }
 }
