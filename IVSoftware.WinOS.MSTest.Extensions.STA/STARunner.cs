@@ -1,4 +1,6 @@
-﻿namespace IVSoftware.WinOS.MSTest.Extensions.STA
+﻿using System.Runtime.InteropServices;
+
+namespace IVSoftware.WinOS.MSTest.Extensions.STA
 {
     public class STARunner : IDisposable
     {
@@ -28,12 +30,14 @@
                     #region L o c a l F x 
                     void localOnHandleCreated(object? sender, EventArgs e)
                     {
+                        MainForm.HandleCreated -= localOnHandleCreated;
+
                         _ = _tcsFormReady.TrySetResult(MainForm);
                         MainForm.BeginInvoke(() =>
                         {
                             // For example, if you do have two usings in one test
                             // method, the second instance might be underneath.
-                            // NOTE: BringToFront has been shown to *not* be up to the tstk.
+                            // NOTE: BringToFront has been shown to *not* be up to the task.
                             MainForm.TopMost = true;
                             MainForm.TopMost = false;
                         });
