@@ -1,7 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace IVSoftware.WinOS.MSTest.Extensions.STA
 {
@@ -31,7 +28,7 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA
 
                 // Manipulate the UI
                 sta.MainForm.Text = "Hello";
-                Assert.IsInstanceOfType<Form>(sta.MainForm);
+                Assert.IsInstanceOfType<SilentRunner>(sta.MainForm);
                 Assert.IsTrue(sta.MainForm.IsHandleCreated);
                 Assert.AreEqual("Hello", sta.MainForm.Text);
 
@@ -104,6 +101,10 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA
                     BackColor = Color.Black
                 };
 
+                // Determine which display has the cursor
+                var screen = Screen.FromPoint(Cursor.Position);
+                popup.Location = screen.WorkingArea.Location;
+
                 var label = new Label
                 {
                     Dock = DockStyle.Fill,
@@ -115,6 +116,7 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA
 
                 popup.Controls.Add(label);
                 popup.Show();
+                popup.CycleTopmost();
 
                 // Stabilize layout + paint before we ever await
                 popup.PerformLayout();
@@ -150,7 +152,7 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA
             {
                 await sta.RunAsync(async () =>
                 {
-                    sta.MainForm.Text = "Main Form";
+                    sta.MainForm.Text = "Main Form #1";
                     await Task.CompletedTask;
                 });
                 for (int countdown = 5; countdown >= 0; countdown--)
@@ -158,7 +160,7 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA
                     await Task.Delay(TimeSpan.FromSeconds(1));
                     await sta.RunAsync(async () =>
                     {
-                        sta.MainForm.Text = $"Main Form - Shutdown in {countdown}";
+                        sta.MainForm.Text = $"Main Form #1 - Shutdown in {countdown}";
                         await Task.CompletedTask;
                     });
                 }
@@ -170,7 +172,7 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA
             {
                 await sta.RunAsync(async () =>
                 {
-                    sta.MainForm.Text = "Main Form";
+                    sta.MainForm.Text = "Main Form #2";
                     await Task.CompletedTask;
                 });
                 for (int countdown = 5; countdown >= 0; countdown--)
@@ -178,10 +180,64 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA
                     await Task.Delay(TimeSpan.FromSeconds(1));
                     await sta.RunAsync(async () =>
                     {
-                        sta.MainForm.Text = $"Main Form - Shutdown in {countdown}";
+                        sta.MainForm.Text = $"Main Form #2 - Shutdown in {countdown}";
                         await Task.CompletedTask;
                     });
                 }
+            }
+        }
+
+        /// <summary>
+        /// Verifies that STARunner can activate a user-supplied Form type
+        /// and execute UI code on the STA thread without marshaling.
+        /// </summary>
+        /// <remarks>
+        /// This test confirms that custom Form classes can serve as the main
+        /// window for a STARunner instance. The callback runs on the UI thread,
+        /// allowing direct property manipulation, handle verification, and
+        /// timing behavior consistent with WinForms.
+        /// </remarks>
+        [TestMethod]
+        public async Task Test_CustomUserForm()
+        {
+            using var sta = new STARunner(isVisible: false, typeof(UserForm));
+            await sta.RunAsync(localStaTest);
+
+            #region L o c a l F x 
+            async Task localStaTest()
+            {
+                Assert.IsFalse(
+                    sta.MainForm.InvokeRequired,
+                    $"Expecting confirmation of UI thread context. No marshal is needed.");
+
+                // Manipulate the UI
+                sta.MainForm.Text = "Hello";
+                Assert.IsInstanceOfType<UserForm>(sta.MainForm);
+                Assert.IsTrue(sta.MainForm.IsHandleCreated);
+                Assert.AreEqual("Hello", sta.MainForm.Text);
+
+                await Task.Delay(TimeSpan.FromSeconds(2.5));
+            }
+            #endregion L o c a l F x
+        }
+
+        /// <summary>
+        /// Simple test form used to validate STARunner activation
+        /// with a user-provided Form type.
+        /// </summary>
+        /// <remarks>
+        /// Provides a visible identity and stable layout for tests that
+        /// rely on form instantiation, handle creation, or UI mutation
+        /// within STARunner's STA thread.
+        /// </remarks>
+
+        class UserForm : Form 
+        {
+            public UserForm()
+            {
+                Text = nameof(UserForm);
+                BackColor = Color.AliceBlue;
+                StartPosition = FormStartPosition.CenterScreen;
             }
         }
     }

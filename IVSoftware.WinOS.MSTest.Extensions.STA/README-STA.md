@@ -15,6 +15,34 @@ public async Task Test_CanonicalPOC()
     using var sta = new STARunner(isVisible: false);
     await sta.RunAsync(localStaTest);
 
+    // Encapsulate the local testing to be done on the STA thread.
+    async Task localStaTest()
+    {
+        Assert.IsFalse(
+            sta.MainForm.InvokeRequired,
+            $"Expecting confirmation of UI thread context. No marshal is needed.");
+
+        // Manipulate the UI
+        sta.MainForm.Text = "Hello";
+        Assert.IsInstanceOfType<SilentRunner>(sta.MainForm);
+        Assert.IsTrue(sta.MainForm.IsHandleCreated);
+        Assert.AreEqual("Hello", sta.MainForm.Text);
+
+        await Task.CompletedTask;
+    }
+}
+```
+___
+
+To test your app's Main Form, pass its Type into the constructor of STARunner.
+
+```
+[TestMethod]
+public async Task Test_CustomUserForm()
+{
+    using var sta = new STARunner(isVisible: false, typeof(UserForm));
+    await sta.RunAsync(localStaTest);
+
     #region L o c a l F x 
     async Task localStaTest()
     {
@@ -24,17 +52,27 @@ public async Task Test_CanonicalPOC()
 
         // Manipulate the UI
         sta.MainForm.Text = "Hello";
-        Assert.IsInstanceOfType<Form>(sta.MainForm);
+        Assert.IsInstanceOfType<UserForm>(sta.MainForm);
         Assert.IsTrue(sta.MainForm.IsHandleCreated);
         Assert.AreEqual("Hello", sta.MainForm.Text);
 
-        await Task.CompletedTask;
+        await Task.Delay(TimeSpan.FromSeconds(2.5));
     }
     #endregion L o c a l F x
 }
+
+class UserForm : Form 
+{
+    public UserForm()
+    {
+        Text = nameof(UserForm);
+        BackColor = Color.AliceBlue;
+        StartPosition = FormStartPosition.CenterScreen;
+    }
+}
 ```
 
-Everything inside `RunAsync` runs on the STA thread with normal WinForms behavior (layout, events, handle creation, etc.). To test your app's Main Form, pass its Type into the constructor of STARunner.
+Either way, everything inside `RunAsync` runs on the STA thread with normal WinForms behavior (layout, events, handle creation, etc.). 
 
 ---
 

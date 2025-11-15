@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace IVSoftware.WinOS.MSTest.Extensions.STA
 {
@@ -12,53 +13,60 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA
             }
             _uiThread = new(() =>
             {
-                if (ActivationType.GetConstructor([typeof(bool)]) is { } ctorWithArg)
-                {
+                // Determine constructor policy up front.
+                ConstructorInfo? ctor =
+                    ActivationType.GetConstructor(new[] { typeof(bool) }) ??
+                    ActivationType.GetConstructor(Type.EmptyTypes);
 
+                if (ctor is null)
+                {
+                    throw new InvalidOperationException(
+                        "ActivationType must expose either a (bool) constructor or a parameterless constructor.");
                 }
-                else if (ActivationType.GetConstructor(Type.EmptyTypes) is { } ctorParameterless)
+
+                // Activate using the chosen constructor.
+                Form? form = ctor.GetParameters().Length switch
                 {
+                    1 => ctor.Invoke(new object[] { isVisible }) as Form,
+                    0 => ctor.Invoke(null) as Form,
+                    _ => null
+                };
+
+                if (form is null)
+                {
+                    throw new InvalidOperationException(
+                        $"Activation of {ActivationType.Name} did not return a Form instance.");
                 }
-                else
+
+                MainForm = form;
+
+                if (MainForm.IsHandleCreated)
                 {
-                    throw new InvalidOperationException("policy");
-                }
-
-                if (Activator.CreateInstance(ActivationType, [isVisible]) is Form success)
-                {
-                    MainForm = success;
-                    if (MainForm.IsHandleCreated)
-                    {
-                        // Silent mode. Handle already exists.
-                        localOnHandleCreated(MainForm, EventArgs.Empty);
-                    }
-                    else
-                    {
-                        MainForm.HandleCreated += localOnHandleCreated;
-                    }
-
-                    Application.Run(MainForm);
-
-                    #region L o c a l F x 
-                    void localOnHandleCreated(object? sender, EventArgs e)
-                    {
-                        MainForm.HandleCreated -= localOnHandleCreated;
-
-                        _ = _tcsFormReady.TrySetResult(MainForm);
-                        MainForm.BeginInvoke(() =>
-                        {
-                            // For example, if you do have two usings in one test
-                            // method, the second instance might be underneath.
-                            // NOTE: BringToFront has been shown to *not* be up to the task.
-                            MainForm.CycleTopmost();
-                        });
-                    }
-                    #endregion L o c a l F x
+                    // Silent mode. Handle already exists.
+                    localOnHandleCreated(MainForm, EventArgs.Empty);
                 }
                 else
                 {
-                    throw new NullReferenceException($"{nameof(MainForm)} activation failed.");
+                    MainForm.HandleCreated += localOnHandleCreated;
                 }
+
+                Application.Run(MainForm);
+
+                #region L o c a l F x 
+                void localOnHandleCreated(object? sender, EventArgs e)
+                {
+                    MainForm.HandleCreated -= localOnHandleCreated;
+
+                    _ = _tcsFormReady.TrySetResult(MainForm);
+                    MainForm.BeginInvoke(() =>
+                    {
+                        // For example, if you do have two usings in one test
+                        // method, the second instance might be underneath.
+                        // NOTE: BringToFront has been shown to *not* be up to the task.
+                        MainForm.CycleTopmost();
+                    });
+                }
+                #endregion L o c a l F x
             });
             _uiThread.SetApartmentState(ApartmentState.STA);
             _uiThread.Start();
