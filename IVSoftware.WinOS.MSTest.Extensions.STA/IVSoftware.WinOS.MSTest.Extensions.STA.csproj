@@ -9,6 +9,9 @@
 		<Title>IVSoftware.WinOS.MSTest.Extensions.STA</Title>
 		<Description>Provides deterministic, headless WinForms STA execution for MSTest unit tests. Ideal for testing UI components, STA-required APIs, and isolated Win32 message pump scenarios.</Description>
 		<PackageTags>windows;winforms;mstest;sta;ui-thread</PackageTags>
+		<PackageReleaseNotes>
+			Initial alpha release. Core STA execution model is stable in internal testing, but requires additional flight time in real-world MSTest scenarios before APIs are finalized.
+		</PackageReleaseNotes>
 
 		<RepositoryUrl>https://github.com/IVSoftware/IVSoftware.WinOS.MSTest.Extensions.git</RepositoryUrl>
 		<!--PackageProjectUrl></PackageProjectUrl-->
@@ -30,7 +33,7 @@
 
 		<!-- Version Strategy -->
 		<BaseVersion>1.0.0</BaseVersion>
-		<VersionPrefix>$(BaseVersion)-local2</VersionPrefix>
+		<VersionPrefix>$(BaseVersion)-alpha</VersionPrefix>
 	</PropertyGroup>
 
 	<ItemGroup>

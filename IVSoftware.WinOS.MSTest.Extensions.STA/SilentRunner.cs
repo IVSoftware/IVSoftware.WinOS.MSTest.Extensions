@@ -1,6 +1,6 @@
 ﻿namespace IVSoftware.WinOS.MSTest.Extensions.STA
 {
-    class SilentRunner : Form
+    public class SilentRunner : Form
     {
         public SilentRunner() : this(true) { }
         public SilentRunner(bool isVisible)
