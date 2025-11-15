@@ -1,12 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace IVSoftware.WinOS.MSTest.Extensions.STA
+﻿namespace IVSoftware.WinOS.MSTest.Extensions.STA
 {
-    public class Extensions
+    public static class Extensions
     {
+        public static void CycleTopmost(this Form @this)
+        {
+            @this.BeginInvoke(() =>
+            {
+                @this.TopMost = true;
+                @this.BeginInvoke(() =>
+                {
+                    @this.TopMost = false;
+                });
+            });
+        }
     }
 }

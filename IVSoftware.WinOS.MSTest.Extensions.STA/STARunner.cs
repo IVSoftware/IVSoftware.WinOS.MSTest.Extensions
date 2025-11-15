@@ -38,8 +38,7 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA
                             // For example, if you do have two usings in one test
                             // method, the second instance might be underneath.
                             // NOTE: BringToFront has been shown to *not* be up to the task.
-                            MainForm.TopMost = true;
-                            MainForm.TopMost = false;
+                            MainForm.CycleTopmost();
                         });
                     }
                     #endregion L o c a l F x

@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace IVSoftware.WinOS.MSTest.Extensions.STA
 {
@@ -63,29 +65,41 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA
                     await Task.CompletedTask;
                 });
 
-                using (Form toast = await sta.RunAsync(async () =>
+                using (Form popup = await sta.RunAsync(async () =>
                 {
-                    return await localCreateForm();
-
-                    #region L o c a l F x 
-                    async Task<Form> localCreateForm()
+                    var popup = new Form
                     {
-                        await Task.CompletedTask;
-                        var toast = new Form
-                        {
-                            StartPosition = FormStartPosition.Manual,
-                        };
-                        toast.Show(null);
-                        return toast;
-                    }
-                    #endregion L o c a l F x
+                        FormBorderStyle = FormBorderStyle.None,
+                        StartPosition = FormStartPosition.Manual,
+                        Size = new Size(300, 100)
+                    };
+
+                    var label = new Label
+                    {
+                        Dock = DockStyle.Fill,
+                        TextAlign = ContentAlignment.MiddleCenter,
+                        Font = new Font("Consolas", 16, FontStyle.Bold),
+                        ForeColor = Color.White,
+                        BackColor = ColorTranslator.FromHtml("#444444"),
+                    };
+
+                    popup.Controls.Add(label);
+                    popup.Tag = label;
+
+                    popup.Show(null);
+                    popup.CycleTopmost();
+                    await Task.CompletedTask;
+                    return popup;
                 }))
                 {
                     for (int countdown = 5; countdown >= 0; countdown--)
                     {
+                        var msg = $"Shutdown in {countdown}";
+
                         await Task.Delay(TimeSpan.FromSeconds(1));
                         await sta.RunAsync(async () =>
                         {
+                            if (popup.Tag is Label lbl) lbl.Text = msg;
                             sta.MainForm.Text = $"Main Form - Shutdown in {countdown}";
                             builder.Add(sta.MainForm.Text);
                             Debug.WriteLine($"SilentDisposalWithNOOP: {sta.MainForm.Text}");
@@ -111,6 +125,12 @@ Main Form - Shutdown in 0";
                 actual.NormalizeResult(),
                 "Expecting loopback of shutdown messages for invisible form."
             );
+        }
+
+        [TestMethod]
+        public void Test_Monolithic()
+        {
+
         }
     }
 }
