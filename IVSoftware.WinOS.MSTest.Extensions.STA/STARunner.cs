@@ -5,7 +5,9 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA
 {
     public class STARunner : IDisposable
     {
-        public STARunner(bool isVisible, Type? type = null)
+        public static STARunner CreateThread(bool isVisible = true) => new STARunner(isVisible);
+        public static STARunner CreateThread<T>(bool isVisible = true) => new STARunner(isVisible, typeof(T));
+        public STARunner(bool isVisible=true, Type? type = null)
         {
             if(type is not null)
             {

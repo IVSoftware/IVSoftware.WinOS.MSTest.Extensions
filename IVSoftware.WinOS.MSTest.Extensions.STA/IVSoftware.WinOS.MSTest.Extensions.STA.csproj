@@ -33,7 +33,7 @@
 
 		<!-- Version Strategy -->
 		<BaseVersion>1.0.0</BaseVersion>
-		<VersionPrefix>$(BaseVersion)-alpha</VersionPrefix>
+		<VersionPrefix>$(BaseVersion)-beta</VersionPrefix>
 	</PropertyGroup>
 
 	<ItemGroup>

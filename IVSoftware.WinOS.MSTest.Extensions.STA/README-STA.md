@@ -1,6 +1,6 @@
 ## IVSoftware.WinOS.MSTest.Extensions.STA
 
-STARunner provides a deterministic Single Threaded Apartment (STA) environment for MSTest. It hosts a lightweight WinForms message pump on a dedicated UI thread, giving tests access to real Windows UI semantics when required by WinForms, COM, or synchronization-context–dependent code.
+STARunner provides a deterministic Single Threaded Apartment (STA) environment for MSTest. It hosts a lightweight WinForms message pump on a dedicated UI thread, giving tests access to real Windows UI semantics when required by WinForms, COM, or synchronization-context - dependent code.
 
 ---
 
@@ -189,4 +189,4 @@ STARunner supplies:
 - transparent async boundaries via `RunAsync`  
 - deterministic teardown  
 
-Ideal for MSTest scenarios requiring WinForms behavior, COM STA affinity, or UI-thread–dependent components, without requiring visible UI unless requested.
+Ideal for MSTest scenarios requiring WinForms behavior, COM STA affinity, or UI-thread - dependent components, without requiring visible UI unless requested.

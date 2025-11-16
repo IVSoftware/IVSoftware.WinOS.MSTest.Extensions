@@ -13,5 +13,11 @@
                 });
             });
         }
+
+        public static STARunner CreateSTAThread(this object? _, bool isVisible)
+            => STARunner.CreateThread(isVisible);
+
+        public static STARunner CreateSTAThread<T>(this object? _, bool isVisible)
+            => STARunner.CreateThread<T>(isVisible);
     }
 }
