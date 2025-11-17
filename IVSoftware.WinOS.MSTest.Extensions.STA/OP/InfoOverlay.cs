@@ -6,6 +6,7 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
     public partial class InfoOverlay
         : Control
         , IMessageFilter
+        , IInfoContentForm
     {
         public InfoOverlay()
         {
@@ -52,6 +53,8 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
             get => _overlayContent.InfoText;
             set => _overlayContent.InfoText = value;
         }
+        public bool IsVisbleDSA { get => ((IInfoContentForm)_overlayContent).IsVisbleDSA; set => ((IInfoContentForm)_overlayContent).IsVisbleDSA = value; }
+
         string _infoText = string.Empty;
 
 

@@ -89,7 +89,7 @@ This tool tip is made visible by:
 - Setting the InfoTest property on this runner.
 
 It will self-close in a few seconds.";
-            await Task.Delay(TimeSpan.FromSeconds(5), cts.Token);
+            await Task.Delay(TimeSpan.FromSeconds(2), cts.Token);
 
             sta.MainForm.Text = "CVR - No Tool Tip";
             sta.MainForm.InfoText = string.Empty;
