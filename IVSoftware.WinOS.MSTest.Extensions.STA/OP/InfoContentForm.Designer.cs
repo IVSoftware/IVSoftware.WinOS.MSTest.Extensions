@@ -108,10 +108,6 @@
             labelInfo.Size = new Size(426, 309);
             labelInfo.TabIndex = 2;
 
-            // w o r k s
-            // labelInfo.Text = "THIS IS A TEST.";
-            InfoText = "THIS IS A TEST.";
-
             labelInfo.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // labelVR

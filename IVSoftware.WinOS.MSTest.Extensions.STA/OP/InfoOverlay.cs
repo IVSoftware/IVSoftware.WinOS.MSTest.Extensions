@@ -19,6 +19,10 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
     {
         public InfoOverlay()
         {
+            // Container = and its child forms, are hidden
+            // until InfoText is set to display text.
+            Visible = false; // InitializeComponent()
+
             Application.AddMessageFilter(this);
 
             // Zero size this actual control so that the
