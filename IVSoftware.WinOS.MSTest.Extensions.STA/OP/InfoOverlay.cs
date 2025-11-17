@@ -1,8 +1,17 @@
 ﻿using IVSoftware.Portable.SQLiteMarkdown;
-using IVSoftware.WinOS.MSTest.Extensions.STA.OP;
 
 namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
 {
+    /// <summary>
+    /// This ZERO SIZE runtime container performs no visual work. 
+    /// </summary>
+    /// <remarks>
+    /// The control exists as a logical anchor for two external forms: a translucent  
+    /// backdrop that dims the parent window, and an InfoContentForm that displays  
+    /// the active banner. Visibility changes propagate to these forms, and click  
+    /// messages are filtered so the user can dismiss the banner without entering  
+    /// a modal state. No rendering occurs on this control itself once created.
+    /// </remarks>
     public partial class InfoOverlay
         : Control
         , IMessageFilter
