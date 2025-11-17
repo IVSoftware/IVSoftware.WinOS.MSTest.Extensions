@@ -202,8 +202,6 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.WinForms
             ((System.ComponentModel.ISupportInitialize)vcView).EndInit();
             contextMenuQueryFilter.ResumeLayout(false);
 
-            InfoText = "This is a test.";
-
             ResumeLayout(false);
         }
 
@@ -223,6 +221,7 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.WinForms
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripComboBox tsmiCombo;
         private ToolStripMenuItem tsmiPromptEachStep;
+
         private InfoOverlay infoOverlay;
     }
 }

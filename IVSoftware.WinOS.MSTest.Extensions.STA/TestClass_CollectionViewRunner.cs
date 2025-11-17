@@ -22,7 +22,9 @@ public class TestClass_CollectionViewRunner
                 sta.MainForm.InvokeRequired,
                 $"Expecting confirmation of UI thread context. No marshal is needed.");
 
-            sta.MainForm.InfoText = "This is a test.";
+            //sta.MainForm.InfoText = "This is a test.";
+            //await Task.Delay(TimeSpan.FromSeconds(1));
+            //sta.MainForm.InfoText = string.Empty;
 
             await tcs.Task;
         }

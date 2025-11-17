@@ -12,6 +12,7 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
             InitializeComponent();
 
             Application.AddMessageFilter(this);
+
             // Zero size this actual control so that the
             // translucent overlay shows content beneath it.
             SizeChanged += (sender, e) => Size = new Size();
@@ -27,6 +28,15 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
                 StartPosition = FormStartPosition.Manual,
                 FormBorderStyle = FormBorderStyle.None,
             };
+            _overlayContent.PropertyChanged += (sender, e) =>
+            {
+                switch (e.PropertyName)
+                {
+                    case nameof(InfoContentForm.InfoText):
+                        Visible = !string.IsNullOrWhiteSpace(InfoText);
+                        break;
+                }
+            };
             Disposed += (sender, e) =>
             {
                 Application.RemoveMessageFilter(this);
@@ -36,12 +46,14 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
         }
 
         // K E E P    D R I L L I N G
+        // We'll get a callback from: _overlayContent.PropertyChanged event.
         public string InfoText
         {
             get => _overlayContent.InfoText;
             set => _overlayContent.InfoText = value;
         }
         string _infoText = string.Empty;
+
 
         private void InitializeComponent()
         {
@@ -123,28 +135,6 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
             labelInfo.Size = new Size(394, 285);
             labelInfo.TabIndex = 2;
             labelInfo.TextAlign = ContentAlignment.MiddleLeft;
-
-#if DEBUG
-            labelInfo.TextChanged += (sender, e) =>
-            {
-                if (string.IsNullOrWhiteSpace(labelInfo.Text))
-                {   /* G T K */
-                }
-                else
-                {   /* G T K */
-                }
-            };
-            labelInfo.VisibleChanged += (sender, e) =>
-            {
-                if (labelInfo.Visible)
-                {   /* G T K */
-                    labelInfo.BackColor = Color.LightGreen;
-                }
-                else
-                {   /* G T K */
-                }
-            };
-#endif
             // 
             // labelVR
             // 
@@ -199,6 +189,8 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
             gridInfo.ResumeLayout(false);
             gridInfo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)iconInfo).EndInit();
+
+            Visible = false;
             ResumeLayout(false);
         }
 

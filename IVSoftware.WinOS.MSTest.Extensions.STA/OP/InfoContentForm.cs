@@ -1,23 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+﻿using System.ComponentModel;
 using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Runtime.CompilerServices;
 
 namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
 {
-    public partial class InfoContentForm : Form
+    public partial class InfoContentForm : Form, INotifyPropertyChanged
     {
-        public InfoContentForm() => InitializeComponent();
-
-        protected override void SetVisibleCore(bool value)
+        public InfoContentForm()
         {
-            base.SetVisibleCore(value && !string.IsNullOrWhiteSpace(InfoText));
+            InitializeComponent();
         }
         protected override void OnResize(EventArgs e)
         {
@@ -44,10 +35,16 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
                 {
                     _infoText = value;
                     labelInfo.Text = value;
-                    Invalidate();
+                    OnPropertyChanged();
                 }
             }
         }
         string _infoText = string.Empty;
+
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        public event PropertyChangedEventHandler? PropertyChanged;
     }
 }
