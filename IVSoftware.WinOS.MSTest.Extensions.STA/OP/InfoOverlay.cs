@@ -61,7 +61,6 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
             tableLayoutPanelOverlayMock = new TableLayoutPanel();
             gridInfo = new InfoLayoutPanel();
             iconInfo = new PictureBox();
-            labelInfo = new Label();
             labelVR = new Label();
             label1 = new Label();
             checkBoxDSA = new CheckBox();
@@ -97,7 +96,6 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
             gridInfo.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 75.10822F));
             gridInfo.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.7489157F));
             gridInfo.Controls.Add(iconInfo, 0, 0);
-            gridInfo.Controls.Add(labelInfo, 2, 0);
             gridInfo.Controls.Add(labelVR, 1, 0);
             gridInfo.Controls.Add(label1, 0, 1);
             gridInfo.Controls.Add(checkBoxDSA, 3, 2);
@@ -123,18 +121,6 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
             iconInfo.SizeMode = PictureBoxSizeMode.AutoSize;
             iconInfo.TabIndex = 1;
             iconInfo.TabStop = false;
-            // 
-            // labelInfo
-            // 
-            gridInfo.SetColumnSpan(labelInfo, 2);
-            labelInfo.Dock = DockStyle.Fill;
-            labelInfo.Font = new Font("Segoe UI", 8.5F);
-            labelInfo.Location = new Point(67, 0);
-            labelInfo.Margin = new Padding(10, 0, 3, 0);
-            labelInfo.Name = "labelInfo";
-            labelInfo.Size = new Size(394, 285);
-            labelInfo.TabIndex = 2;
-            labelInfo.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // labelVR
             // 
@@ -265,7 +251,6 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
         private InfoLayoutPanel gridInfo = null!;
         private CheckBox checkBoxDSA = null!;
         private PictureBox iconInfo = null!;
-        private Label labelInfo = null!;
         private Label labelVR = null!;
         private Label label1 = null!;
         private Label label2 = null!;
