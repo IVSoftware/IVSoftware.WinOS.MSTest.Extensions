@@ -107,19 +107,8 @@
             labelInfo.Name = "labelInfo";
             labelInfo.Size = new Size(426, 309);
             labelInfo.TabIndex = 2; 
-            labelInfo.Text = @"
-Try these simple searches:
-    • animal
-    • color
 
-Compare:
-    • app vs [app]
-    • gre app vs gre [app]
-
-💡 Hint: Tap [×] twice to reset:
-    • First clears filter text.
-    • Second returns to query mode.".Trim();
-
+            labelInfo.Text = InfoText;
 
             labelInfo.TextAlign = ContentAlignment.MiddleLeft;
             // 

@@ -35,6 +35,5 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.WinForms
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         public event PropertyChangedEventHandler? PropertyChanged;
-
     }
 }

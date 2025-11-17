@@ -24,6 +24,12 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA
             }
             _uiThread = new(() =>
             {
+                // [Careful]
+                // These must go first, before any IWin32Window objects are created.
+                Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+
                 // Determine constructor policy up front.
                 ConstructorInfo? ctor =
                     ActivationType.GetConstructor(new[] { typeof(bool) }) ??

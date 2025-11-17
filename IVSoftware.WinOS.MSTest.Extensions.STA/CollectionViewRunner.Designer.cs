@@ -47,6 +47,7 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.WinForms
             tsmiPromptEachStep = new ToolStripMenuItem();
             buttonClear = new NoFocusButton();
             labelSearchIcon = new Label();
+            infoOverlay = new();
             Grid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)vcView).BeginInit();
             contextMenuQueryFilter.SuspendLayout();
@@ -191,6 +192,7 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.WinForms
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(518, 904);
             Controls.Add(Grid);
+            Controls.Add(infoOverlay);
             Name = "MainForm";
             Padding = new Padding(5);
             StartPosition = FormStartPosition.CenterScreen;
@@ -200,11 +202,8 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.WinForms
             ((System.ComponentModel.ISupportInitialize)vcView).EndInit();
             contextMenuQueryFilter.ResumeLayout(false);
 
-            Controls.Add(new InfoOverlay
-            {
-                Dock = DockStyle.Fill,
-                Visible = true,
-            });
+            infoOverlay.InfoText = "This is a test.";
+
             ResumeLayout(false);
         }
 
@@ -224,5 +223,6 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.WinForms
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripComboBox tsmiCombo;
         private ToolStripMenuItem tsmiPromptEachStep;
+        private InfoOverlay infoOverlay;
     }
 }

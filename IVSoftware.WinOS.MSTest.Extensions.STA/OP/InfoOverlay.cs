@@ -245,17 +245,17 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
             }
         }
 
-        private readonly Form _overlay;
-        private readonly Form _overlayContent;
+        private readonly Form _overlay = null!;
+        private readonly Form _overlayContent = null!;
 
-        private TableLayoutPanel tableLayoutPanelOverlayMock;
-        private InfoLayoutPanel gridInfo;
-        private CheckBox checkBoxDSA;
-        private PictureBox iconInfo;
-        private Label labelInfo;
-        private Label labelVR;
-        private Label label1;
-        private Label label2;
+        private TableLayoutPanel tableLayoutPanelOverlayMock = null!;
+        private InfoLayoutPanel gridInfo = null!;
+        private CheckBox checkBoxDSA = null!;
+        private PictureBox iconInfo = null!;
+        private Label labelInfo = null!;
+        private Label labelVR = null!;
+        private Label label1 = null!;
+        private Label label2 = null!;
     }
     static class InfoOverlayExtensions
     {
