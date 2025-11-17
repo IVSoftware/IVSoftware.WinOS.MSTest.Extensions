@@ -17,10 +17,15 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.WinForms
             base.DataContext = new CollectionViewDataContext();
             DataContext.PropertyChanged += (sender, e) =>
             {
-                Debug.Fail($@"ADVISORY - First Time.");
+                switch (e.PropertyName)
+                {
+                    case nameof(CollectionViewDataContext.ItemsSource):
+                        vcView.ItemsSource = DataContext.ItemsSource;
+                        break;
+                }
             };
         }
-        new CollectionViewDataContext DataContext => (CollectionViewDataContext)base.DataContext;
+        new CollectionViewDataContext DataContext => (CollectionViewDataContext)base.DataContext!;
         public string InfoText
         {
             get => infoOverlay?.InfoText! ?? string.Empty;

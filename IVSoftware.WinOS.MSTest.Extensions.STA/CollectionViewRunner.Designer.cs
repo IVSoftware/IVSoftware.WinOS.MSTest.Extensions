@@ -209,6 +209,7 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.WinForms
 
         private TableLayoutPanel Grid;
         private CollectionView vcView;
+
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private TextBox textInputText;
         private NoFocusButton buttonClear;

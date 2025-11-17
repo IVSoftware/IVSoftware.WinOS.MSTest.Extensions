@@ -30,6 +30,17 @@ public class TestClass_CollectionViewRunner
                 sta.MainForm.InvokeRequired,
                 $"Expecting confirmation of UI thread context. No marshal is needed.");
 
+
+            var dataContext = (CollectionViewDataContext)sta.MainForm.DataContext!;
+            Assert.IsNotNull(dataContext);
+            { }
+            dataContext.ItemsSource = new[]
+            {
+                "Dogs",
+                "Cats",
+                "Pets",
+            }; 
+
             await tcs.Task;
         }
     }
