@@ -3,10 +3,19 @@ using System.Runtime.InteropServices;
 
 namespace IVSoftware.WinOS.MSTest.Extensions.STA
 {
+    public class STARunner<T> : STARunner where T : Form
+    {
+        public STARunner(bool isVisible = true, Type? type = null) : base(isVisible, type) { }
+
+        public new T MainForm
+        {
+            get => (T) base.MainForm;
+        }
+    }
     public class STARunner : IDisposable
     {
         public static STARunner CreateThread(bool isVisible = true) => new STARunner(isVisible);
-        public static STARunner CreateThread<T>(bool isVisible = true) => new STARunner(isVisible, typeof(T));
+        public static STARunner<T> CreateThread<T>(bool isVisible = true) where T : Form => new STARunner<T>(isVisible, typeof(T));
         public STARunner(bool isVisible=true, Type? type = null)
         {
             if(type is not null)
