@@ -4,7 +4,10 @@ using System.Runtime.CompilerServices;
 
 namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
 {
-    public partial class InfoContentForm : Form, INotifyPropertyChanged
+    public partial class InfoContentForm
+        : Form
+        , INotifyPropertyChanged
+        , IInfoContentForm
     {
         public InfoContentForm()
         {
@@ -40,6 +43,25 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
             }
         }
         string _infoText = string.Empty;
+
+        public bool IsVisbleDSA
+        {
+            get => _showDSA;
+            set
+            {
+                if (!Equals(_showDSA, value))
+                {
+                    _showDSA = value;
+                    labelHR.Visible = _showDSA;
+                    labelDSA.Visible = _showDSA;
+                    checkBoxDSA.Visible = _showDSA;
+
+                    OnPropertyChanged();
+                }
+            }
+        }
+        bool _showDSA = true;
+
 
 
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) =>
