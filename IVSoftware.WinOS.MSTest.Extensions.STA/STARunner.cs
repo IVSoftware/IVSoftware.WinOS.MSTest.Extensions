@@ -75,7 +75,9 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA
         }
 
         private readonly Thread _uiThread;
-        private readonly TaskCompletionSource<Form> _tcsFormReady = new();
+        public TaskCompletionSource<Form> _tcsFormReady = new();
+
+        public async Task WaitReadyAsync() => await _tcsFormReady.Task;
 
         public Type ActivationType
         {

@@ -16,6 +16,10 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
         public InfoContentForm()
         {
             InitializeComponent();
+            if(!string.IsNullOrWhiteSpace(InfoText))
+            {
+                
+            }
         }
         protected override void OnResize(EventArgs e)
         {
@@ -33,5 +37,19 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
                 Region = new Region(path);
             }
         }
+        public string InfoText
+        {
+            get => _infoText;
+            set
+            {
+                if (!Equals(_infoText, value))
+                {
+                    _infoText = value;
+                    labelInfo.Text = value;
+                }
+            }
+        }
+        string _infoText = "This is a test.";
+
     }
 }
