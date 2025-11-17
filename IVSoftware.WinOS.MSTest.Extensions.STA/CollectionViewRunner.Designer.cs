@@ -202,7 +202,7 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.WinForms
             ((System.ComponentModel.ISupportInitialize)vcView).EndInit();
             contextMenuQueryFilter.ResumeLayout(false);
 
-            infoOverlay.InfoText = "This is a test.";
+            InfoText = "This is a test.";
 
             ResumeLayout(false);
         }

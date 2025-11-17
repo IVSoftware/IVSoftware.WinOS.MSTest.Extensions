@@ -19,17 +19,9 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.WinForms
         }
         public string InfoText
         {
-            get => _infoText;
-            set
-            {
-                if (!Equals(_infoText, value))
-                {
-                    _infoText = value;
-                    OnPropertyChanged();
-                }
-            }
+            get => infoOverlay?.InfoText! ?? string.Empty;
+            set => infoOverlay.InfoText = value;
         }
-        string _infoText = string.Empty;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

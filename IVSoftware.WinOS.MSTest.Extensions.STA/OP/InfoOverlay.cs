@@ -35,16 +35,11 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
             };
         }
 
+        // K E E P    D R I L L I N G
         public string InfoText
         {
-            get => _infoText;
-            set
-            {
-                if (!Equals(_infoText, value))
-                {
-                    _infoText = value;
-                }
-            }
+            get => _overlayContent.InfoText;
+            set => _overlayContent.InfoText = value;
         }
         string _infoText = string.Empty;
 
@@ -128,6 +123,28 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
             labelInfo.Size = new Size(394, 285);
             labelInfo.TabIndex = 2;
             labelInfo.TextAlign = ContentAlignment.MiddleLeft;
+
+#if DEBUG
+            labelInfo.TextChanged += (sender, e) =>
+            {
+                if (string.IsNullOrWhiteSpace(labelInfo.Text))
+                {   /* G T K */
+                }
+                else
+                {   /* G T K */
+                }
+            };
+            labelInfo.VisibleChanged += (sender, e) =>
+            {
+                if (labelInfo.Visible)
+                {   /* G T K */
+                    labelInfo.BackColor = Color.LightGreen;
+                }
+                else
+                {   /* G T K */
+                }
+            };
+#endif
             // 
             // labelVR
             // 
@@ -246,7 +263,11 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
         }
 
         private readonly Form _overlay = null!;
-        private readonly Form _overlayContent = null!;
+
+        /// <summary>
+        /// Strongly typed content form.
+        /// </summary>
+        private readonly InfoContentForm _overlayContent = null!;
 
         private TableLayoutPanel tableLayoutPanelOverlayMock = null!;
         private InfoLayoutPanel gridInfo = null!;

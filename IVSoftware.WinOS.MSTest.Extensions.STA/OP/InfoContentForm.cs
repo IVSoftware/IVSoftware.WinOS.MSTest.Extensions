@@ -13,13 +13,11 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
 {
     public partial class InfoContentForm : Form
     {
-        public InfoContentForm()
+        public InfoContentForm() => InitializeComponent();
+
+        protected override void SetVisibleCore(bool value)
         {
-            InitializeComponent();
-            if(!string.IsNullOrWhiteSpace(InfoText))
-            {
-                
-            }
+            base.SetVisibleCore(value && !string.IsNullOrWhiteSpace(InfoText));
         }
         protected override void OnResize(EventArgs e)
         {
@@ -46,10 +44,10 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
                 {
                     _infoText = value;
                     labelInfo.Text = value;
+                    Invalidate();
                 }
             }
         }
-        string _infoText = "This is a test.";
-
+        string _infoText = string.Empty;
     }
 }

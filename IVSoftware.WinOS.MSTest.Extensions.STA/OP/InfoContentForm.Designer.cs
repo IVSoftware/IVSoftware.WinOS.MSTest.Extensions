@@ -106,9 +106,11 @@
             labelInfo.Margin = new Padding(10, 3, 3, 0);
             labelInfo.Name = "labelInfo";
             labelInfo.Size = new Size(426, 309);
-            labelInfo.TabIndex = 2; 
+            labelInfo.TabIndex = 2;
 
-            labelInfo.Text = InfoText;
+            // w o r k s
+            // labelInfo.Text = "THIS IS A TEST.";
+            InfoText = "THIS IS A TEST.";
 
             labelInfo.TextAlign = ContentAlignment.MiddleLeft;
             // 
