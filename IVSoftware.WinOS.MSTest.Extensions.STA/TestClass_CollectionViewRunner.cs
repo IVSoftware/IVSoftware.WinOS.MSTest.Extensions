@@ -21,7 +21,10 @@ public class TestClass_CollectionViewRunner
         {
             var tcs = new TaskCompletionSource();
             Assert.IsInstanceOfType<CollectionViewRunner>(sta.MainForm);
+
+            // Interactive Return
             sta.MainForm.FormClosed += (sender, e) => tcs.SetResult();
+
             sta.MainForm.Text = "CVR - Interactive Mode";
             Assert.IsFalse(
                 sta.MainForm.InvokeRequired,
@@ -30,7 +33,6 @@ public class TestClass_CollectionViewRunner
             await tcs.Task;
         }
     }
-
 
     [TestMethod, Ignore]
     public async Task Test_CVR()
@@ -49,16 +51,13 @@ public class TestClass_CollectionViewRunner
         }
     }
 
-
     /// <summary>
-    /// Exercises the InfoText pathway on a UI form hosted by STARunner.
+    /// Exercises the InfoText pathway to show and hide tool tip overlay.
     /// </summary>  
     /// <remarks>
-    /// The test boots a CollectionViewRunner on an isolated STA thread and  
-    /// verifies that all updates occur on the correct UI context. It then  
-    /// toggles the form’s InfoText property to confirm that the runner  
-    /// displays and hides its informational banner as expected, with  
-    /// timed pauses allowing visual confirmation during execution.
+    /// This test also demonstrates using a task completion source
+    /// to induce an early return via TaskCanceledException (in 
+    /// contrast to hanging the test like it did before).
     /// </remarks>
     [TestMethod]
     public async Task Test_InfoText()
@@ -70,13 +69,18 @@ public class TestClass_CollectionViewRunner
         // Encapsulate the local testing to be done on the STA thread.
         async Task localStaTest()
         {
+            var cts = new CancellationTokenSource();
+            // Early Return
+            sta.MainForm.FormClosed += (sender, e) => cts.Cancel();
+
+
             Assert.IsInstanceOfType<CollectionViewRunner>(sta.MainForm);
             Assert.IsFalse(
                 sta.MainForm.InvokeRequired,
                 $"Expecting confirmation of UI thread context. No marshal is needed.");
 
             sta.MainForm.Text = "CVR - No Tool Tip";
-            await Task.Delay(TimeSpan.FromSeconds(2));
+            await Task.Delay(TimeSpan.FromSeconds(2), cts.Token);
 
             sta.MainForm.Text = "CVR - Tool Tip Visible";
             sta.MainForm.InfoText = @"
@@ -85,11 +89,11 @@ This tool tip is made visible by:
 - Setting the InfoTest property on this runner.
 
 It will self-close in a few seconds.";
-            await Task.Delay(TimeSpan.FromSeconds(5));
+            await Task.Delay(TimeSpan.FromSeconds(5), cts.Token);
 
             sta.MainForm.Text = "CVR - No Tool Tip";
             sta.MainForm.InfoText = string.Empty;
-            await Task.Delay(TimeSpan.FromSeconds(2));
+            await Task.Delay(TimeSpan.FromSeconds(2), cts.Token);
         }
     }
 }
