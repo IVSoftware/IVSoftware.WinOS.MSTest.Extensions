@@ -10,8 +10,6 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
     {
         public InfoOverlay()
         {
-            InitializeComponent();
-
             Application.AddMessageFilter(this);
 
             // Zero size this actual control so that the
@@ -56,132 +54,6 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
         public bool IsVisbleDSA { get => ((IInfoContentForm)_overlayContent).IsVisbleDSA; set => ((IInfoContentForm)_overlayContent).IsVisbleDSA = value; }
 
         string _infoText = string.Empty;
-
-
-        private void InitializeComponent()
-        {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InfoOverlay));
-            tableLayoutPanelOverlayMock = new TableLayoutPanel();
-            gridInfo = new InfoLayoutPanel();
-            iconInfo = new PictureBox();
-            labelVR = new Label();
-            label1 = new Label();
-            checkBoxDSA = new CheckBox();
-            label2 = new Label();
-            tableLayoutPanelOverlayMock.SuspendLayout();
-            gridInfo.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)iconInfo).BeginInit();
-            SuspendLayout();
-            // 
-            // tableLayoutPanelOverlayMock
-            // 
-            tableLayoutPanelOverlayMock.ColumnCount = 3;
-            tableLayoutPanelOverlayMock.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 4.545455F));
-            tableLayoutPanelOverlayMock.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 90.90909F));
-            tableLayoutPanelOverlayMock.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 4.5454545F));
-            tableLayoutPanelOverlayMock.Controls.Add(gridInfo, 1, 1);
-            tableLayoutPanelOverlayMock.Dock = DockStyle.Fill;
-            tableLayoutPanelOverlayMock.Location = new Point(0, 0);
-            tableLayoutPanelOverlayMock.Name = "tableLayoutPanelOverlayMock";
-            tableLayoutPanelOverlayMock.RowCount = 3;
-            tableLayoutPanelOverlayMock.RowStyles.Add(new RowStyle(SizeType.Percent, 33.29646F));
-            tableLayoutPanelOverlayMock.RowStyles.Add(new RowStyle(SizeType.Percent, 36.7256622F));
-            tableLayoutPanelOverlayMock.RowStyles.Add(new RowStyle(SizeType.Percent, 29.9778767F));
-            tableLayoutPanelOverlayMock.Size = new Size(518, 904);
-            tableLayoutPanelOverlayMock.TabIndex = 0;
-            // 
-            // gridInfo
-            // 
-            gridInfo.BackColor = Color.FromArgb(178, 223, 219);
-            gridInfo.ColumnCount = 4;
-            gridInfo.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.9047623F));
-            gridInfo.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 2F));
-            gridInfo.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 75.10822F));
-            gridInfo.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.7489157F));
-            gridInfo.Controls.Add(iconInfo, 0, 0);
-            gridInfo.Controls.Add(labelVR, 1, 0);
-            gridInfo.Controls.Add(label1, 0, 1);
-            gridInfo.Controls.Add(checkBoxDSA, 3, 2);
-            gridInfo.Controls.Add(label2, 2, 2);
-            gridInfo.Dock = DockStyle.Fill;
-            gridInfo.Location = new Point(26, 304);
-            gridInfo.Name = "gridInfo";
-            gridInfo.RowCount = 3;
-            gridInfo.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            gridInfo.RowStyles.Add(new RowStyle(SizeType.Absolute, 1F));
-            gridInfo.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-            gridInfo.Size = new Size(464, 326);
-            gridInfo.TabIndex = 0;
-            // 
-            // iconInfo
-            // 
-            iconInfo.Anchor = AnchorStyles.None; 
-            iconInfo.Image = SystemIcons.Information.ToBitmap();
-            iconInfo.Location = new Point(6, 118);
-            iconInfo.Margin = new Padding(5, 0, 0, 0);
-            iconInfo.Name = "iconInfo";
-            iconInfo.Size = new Size(48, 48);
-            iconInfo.SizeMode = PictureBoxSizeMode.AutoSize;
-            iconInfo.TabIndex = 1;
-            iconInfo.TabStop = false;
-            // 
-            // labelVR
-            // 
-            labelVR.Anchor = AnchorStyles.None;
-            labelVR.BackColor = Color.FromArgb(170, 170, 170);
-            labelVR.Location = new Point(58, 27);
-            labelVR.Name = "labelVR";
-            labelVR.Size = new Size(1, 230);
-            labelVR.TabIndex = 3;
-            // 
-            // label1
-            // 
-            label1.BackColor = Color.FromArgb(170, 170, 170);
-            gridInfo.SetColumnSpan(label1, 4);
-            label1.Dock = DockStyle.Fill;
-            label1.Location = new Point(10, 285);
-            label1.Margin = new Padding(10, 0, 10, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(444, 1);
-            label1.TabIndex = 3;
-            // 
-            // checkBoxDSA
-            // 
-            checkBoxDSA.Anchor = AnchorStyles.None;
-            checkBoxDSA.AutoSize = true;
-            checkBoxDSA.Font = new Font("Segoe UI", 8F);
-            checkBoxDSA.Location = new Point(419, 295);
-            checkBoxDSA.Margin = new Padding(3, 3, 10, 3);
-            checkBoxDSA.Name = "checkBoxDSA";
-            checkBoxDSA.Size = new Size(22, 21);
-            checkBoxDSA.TabIndex = 0;
-            checkBoxDSA.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            label2.Anchor = AnchorStyles.Right;
-            label2.AutoSize = true;
-            label2.Font = new Font("Microsoft Sans Serif", 8.25F);
-            label2.ForeColor = Color.FromArgb(34, 34, 34);
-            label2.Location = new Point(147, 293);
-            label2.Margin = new Padding(3, 0, 10, 0);
-            label2.Name = "label2";
-            label2.Padding = new Padding(0, 0, 0, 5);
-            label2.Size = new Size(247, 25);
-            label2.TabIndex = 4;
-            label2.Text = "Don't show this message again.";
-            label2.Visible = false;
-
-            Controls.Add(tableLayoutPanelOverlayMock);
-            Name = "InfoOverlay";
-            tableLayoutPanelOverlayMock.ResumeLayout(false);
-            gridInfo.ResumeLayout(false);
-            gridInfo.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)iconInfo).EndInit();
-
-            Visible = false;
-            ResumeLayout(false);
-        }
 
         public bool PreFilterMessage(ref Message m)
         {
@@ -249,14 +121,6 @@ namespace IVSoftware.WinOS.MSTest.Extensions.STA.OP
         /// Strongly typed content form.
         /// </summary>
         private readonly InfoContentForm _overlayContent = null!;
-
-        private TableLayoutPanel tableLayoutPanelOverlayMock = null!;
-        private InfoLayoutPanel gridInfo = null!;
-        private CheckBox checkBoxDSA = null!;
-        private PictureBox iconInfo = null!;
-        private Label labelVR = null!;
-        private Label label1 = null!;
-        private Label label2 = null!;
     }
     static class InfoOverlayExtensions
     {
