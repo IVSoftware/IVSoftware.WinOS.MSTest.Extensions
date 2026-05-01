@@ -35,10 +35,6 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
-		<None Include="README\breaking-change-sentinel.md">
-			<Pack>True</Pack>
-			<PackagePath>IVSoftware.WinOS.MSTest.Extensions\README\</PackagePath>
-		</None>
 	</ItemGroup>
 
 	<ItemGroup>

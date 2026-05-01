@@ -15,7 +15,7 @@ ___
 ### Table of Contents
 
 - [Clipboard](#clipboard) - Inline ad hoc test-limit generation for velocitized unit testing
-- [Breaking-Change Sentinel](./IVSoftware.WinOS.MSTest.Extensions/README/breaking-change-sentinel.md) - Public-contract witness, baseline, and breaking-change diff workflow
+- [Breaking-Change Sentinel](https://github.com/IVSoftware/IVSoftware.WinOS.MSTest.Extensions/blob/master/IVSoftware.WinOS.MSTest.Extensions/README/breaking-change-sentinel.md) - Public-contract witness, baseline, and breaking-change diff workflow
 
 ---
 
