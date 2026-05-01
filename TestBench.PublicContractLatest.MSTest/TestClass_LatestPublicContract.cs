@@ -63,13 +63,13 @@ namespace TestBench.MSTest
                 }
                 else
                 {
-                    var diff = baseline.GetBreakingChanges(revision, ManifestTypePolicy.AssemblyOnly);
+                    var diff = baseline.GetBreakingChanges(revision, ManifestTypePolicy.IVSoftwareAssembliesOnly);
 
                     actual = diff!.ToString(); ;
                     actual.ToClipboardExpected();
                     { }
                     expected = @" 
-<breakingChanges policy=""AssemblyOnly"" />";
+<breakingChanges policy=""IVSoftwareAssembliesOnly"" />";
 
                     Assert.AreEqual(
                         expected.NormalizeResult(),

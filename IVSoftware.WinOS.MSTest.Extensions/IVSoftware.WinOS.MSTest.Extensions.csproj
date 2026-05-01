@@ -56,4 +56,8 @@
 	  <Content Include="Images\breaking-on-empty-code-block.png" />
 	  <Content Include="Images\templatized-code-snippet-first-look.png" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="README\" />
+	</ItemGroup>
 </Project>

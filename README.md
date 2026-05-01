@@ -8,6 +8,11 @@ The **MSTest Clipboard Utilities** package is designed to enhance the testing wo
 
 Additionally, the package includes optional Visual Studio code snippets that streamline the process of generating test limits on the fly, allowing developers to dynamically craft and validate test assertions during debugging sessions.
 
+### Table of Contents
+
+- [Clipboard](#clipboard) - rapid, agile, velocitized interactive inline test limit generation and update workflow
+- [Breaking-Change Sentinel](./IVSoftware.WinOS.MSTest.Extensions/README/breaking-change-sentinel.md) - public-contract witness, baseline, and breaking-change diff workflow
+
 ---
 
 ### Critical Setup
@@ -32,6 +37,9 @@ Without this configuration, the `ToClipboard()` and `ToClipboardAssert()` method
 ---
 
 ### Key Features
+
+### Clipboard
+
 
 #### 1. `ToClipboard()`
 The `ToClipboard()` method copies the **actual output** (e.g., a serialized JSON string) to the clipboard for immediate inspection. This raw output can be pasted into external tools such as Notepad, JSON validators, or directly into your testing environment for manual review.
