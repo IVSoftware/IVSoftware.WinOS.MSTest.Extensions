@@ -8,10 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Witness\XBoundObject Version=2.0.3.Dependencies.xml" />
     <None Remove="Witness\XBoundObject Version=2.0.3.xml" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Witness\XBoundObject Version=2.0.3.Dependencies.xml" />
     <EmbeddedResource Include="Witness\XBoundObject Version=2.0.3.xml" />
   </ItemGroup>
 

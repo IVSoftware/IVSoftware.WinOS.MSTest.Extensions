@@ -3110,7 +3110,7 @@ namespace TestBench.PublicContractWitness.MSTest
 
 #if false || SAVE_CONTRACT_FILES
             // EmbeddedResource
-            File.WriteAllText(@"XBoundObject Version=2.0.3.xml", contractOrig);
+            File.WriteAllText(@"XBoundObject Version=2.0.3.Dependencies.xml", contractOrig);
 #else
             actual = contractOrig;
             actual.ToClipboardExpected();
