@@ -1,7 +1,6 @@
 # [<](../../README.md)
 
 # Breaking-Change Sentinel
-
 `IVSoftware.WinOS.MSTest.Extensions` now exposes a small public-contract API for
 compatibility analysis.
 
@@ -10,6 +9,8 @@ That API ships in the NuGet package.
 The MSTest projects discussed below do **not** ship in the NuGet package. They
 are repository examples and regression harnesses that demonstrate how to use the
 API against published witness versions and current source builds.
+
+___
 
 ## Shipped API
 
@@ -27,6 +28,8 @@ Together, these methods let you:
 2. store that contract as a baseline witness
 3. compare a later build against that witness
 4. extract grouped breaking-change diagnostics when the contract no longer holds
+
+___
 
 ## Policy Scopes
 
@@ -47,10 +50,11 @@ Use this when the question is:
 
 IVSoftware dependency identities are preserved rather than flattened.
 
-## Repo Example
+___
 
-This repository currently demonstrates the sentinel workflow with
-`IVSoftware.Portable.Xml.Linq.XBoundObject`.
+## Actual IVS Internal XBoundObject Contract Sentinel
+
+The project [repo](https://github.com/IVSoftware/IVSoftware.WinOS.MSTest.Extensions.git) demonstrates an actual in-house sentinel workflow. The validation target is: `IVSoftware.Portable.Xml.Linq.XBoundObject`.
 
 There are two MSTest projects:
 
@@ -68,7 +72,7 @@ For the current example, the witness target is:
 
 Important distinction:
 
-- the old package assembly is the **subject**
+- The old package assembly is the **subject**
 - `IVSoftware.WinOS.MSTest.Extensions` is the **tool provider**
 
 So this pattern:
@@ -91,13 +95,15 @@ versions.
 
 For the current example, the latest project compares:
 
-- witness: `XBoundObject` `2.0.3`
-- revision: current `XBoundObject` source build (for example `2.0.4-beta`)
+- Witness: `XBoundObject` `2.0.3`
+- Revision: current `XBoundObject` source build (for example `2.0.4-beta`)
 
 The embedded witness files are:
 
 - `Witness\XBoundObject Version=2.0.3.xml`
 - `Witness\XBoundObject Version=2.0.3.Dependencies.xml`
+
+___
 
 ## Recommended Workflow
 
@@ -113,12 +119,12 @@ The validation policy and diff policy must match.
 
 Good:
 
-- validate with `AssemblyOnly`, diff with `AssemblyOnly`
-- validate with `IVSoftwareAssembliesOnly`, diff with `IVSoftwareAssembliesOnly`
+- Validate with `AssemblyOnly`, diff with `AssemblyOnly`
+- Validate with `IVSoftwareAssembliesOnly`, diff with `IVSoftwareAssembliesOnly`
 
 Bad:
 
-- validate with one policy and diff with another
+- Validate with one policy and diff with another
 
 If they differ, the diagnostic no longer describes the same scope that caused
 the failure.
@@ -131,7 +137,7 @@ That is not noise. That is the point.
 
 The figure of merit is:
 
-- every character must match verbatim
+- Every character must match verbatim
 
 Because the MSTest witness files live only in the repository test harness, this
 bulk does not affect the customer-facing NuGet payload.

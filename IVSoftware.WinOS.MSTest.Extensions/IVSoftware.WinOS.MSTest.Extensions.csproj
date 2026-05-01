@@ -17,17 +17,27 @@
 		<Copyright>Copyright © 2024 IVSoftware LLC</Copyright>
 		<FileVersion>$(AssemblyVersion)</FileVersion>
 		<Version>$(AssemblyVersion)</Version>
+		<PackageReleaseNotes>
+			Version 2.0.0 introduces a breaking-change sentinel for public contract regression analysis.
+			Adds public contract tooling including ToPublicContract, ToPublicManifest, IsContractValid,
+			GetBreakingChanges, ReadManifestResourceFile, and ManifestTypePolicy while preserving the
+			existing clipboard-driven inline test limit workflow.
+		</PackageReleaseNotes>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<DebugType>embedded</DebugType>
-		<BaseVersion>1.0.8</BaseVersion>
-		<VersionPrefix>$(BaseVersion)</VersionPrefix>
+		<BaseVersion>2.0.0</BaseVersion>
+		<VersionPrefix>$(BaseVersion)-beta</VersionPrefix>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Include="..\README.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="README\breaking-change-sentinel.md">
+			<Pack>True</Pack>
+			<PackagePath>IVSoftware.WinOS.MSTest.Extensions\README\</PackagePath>
 		</None>
 	</ItemGroup>
 
