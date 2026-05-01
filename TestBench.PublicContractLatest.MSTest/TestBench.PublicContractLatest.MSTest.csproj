@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\IVSoftware.Portable.Xml.Linq.XBoundObject\IVSoftware.Portable.Xml.Linq.XBoundObject\IVSoftware.Portable.Xml.Linq.XBoundObject.csproj" />
     <ProjectReference Include="..\IVSoftware.WinOS.MSTest.Extensions\IVSoftware.WinOS.MSTest.Extensions.csproj" />
   </ItemGroup>
 

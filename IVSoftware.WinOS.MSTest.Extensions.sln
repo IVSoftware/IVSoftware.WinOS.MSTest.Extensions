@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBench.PublicContractWit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBench.PublicContractLatest.MSTest", "TestBench.PublicContractLatest.MSTest\TestBench.PublicContractLatest.MSTest.csproj", "{5F8E7A73-08E7-9066-58C8-F058DC5E2F22}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IVSoftware.Portable.Xml.Linq.XBoundObject", "..\IVSoftware.Portable.Xml.Linq.XBoundObject\IVSoftware.Portable.Xml.Linq.XBoundObject\IVSoftware.Portable.Xml.Linq.XBoundObject.csproj", "{F11B47B9-9796-E286-19CD-6BF62081FECA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{5F8E7A73-08E7-9066-58C8-F058DC5E2F22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F8E7A73-08E7-9066-58C8-F058DC5E2F22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F8E7A73-08E7-9066-58C8-F058DC5E2F22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F11B47B9-9796-E286-19CD-6BF62081FECA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F11B47B9-9796-E286-19CD-6BF62081FECA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F11B47B9-9796-E286-19CD-6BF62081FECA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F11B47B9-9796-E286-19CD-6BF62081FECA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
