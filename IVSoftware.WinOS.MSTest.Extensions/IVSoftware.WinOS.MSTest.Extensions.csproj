@@ -30,6 +30,10 @@
 			<PackagePath>\</PackagePath>
 		</None>
 	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="IVSoftware.Portable.Common" Version="*" />
+	</ItemGroup>
 	
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
 		<SignAssembly>true</SignAssembly>
