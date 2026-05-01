@@ -2,7 +2,8 @@
 
 namespace IVSoftware.WinOS.MSTest.Extensions.STA
 {
-    [TestClass]
+    [TestClass] 
+//  [TestClass, Ignore] // These are working, but long-ish running STA thread tests.
     public sealed class TestClass_STA
     {
         /// <summary>

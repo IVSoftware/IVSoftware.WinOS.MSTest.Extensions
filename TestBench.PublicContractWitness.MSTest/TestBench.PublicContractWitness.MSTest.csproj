@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0-windows</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!--Do not upgrade these versions. The point is to write contracts on these previous stable releases.-->
+		<PackageReference Include="IVSoftware.GlyphProvider.Portable" Version="1.1.0" />
+		<PackageReference Include="IVSoftware.Portable.SQLiteMarkdown" Version="1.0.1" />
+		<PackageReference Include="IVSoftware.Portable.Xml.Linq.XBoundObject" Version="2.0.3" />
+		<PackageReference Include="MSTest" Version="4.0.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\IVSoftware.WinOS.MSTest.Extensions\IVSoftware.WinOS.MSTest.Extensions.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+	</ItemGroup>
+
+</Project>

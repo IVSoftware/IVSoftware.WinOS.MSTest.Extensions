@@ -1,11 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.11.35327.3
+# Visual Studio Version 18
+VisualStudioVersion = 18.5.11723.231 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IVSoftware.WinOS.MSTest.Extensions", "IVSoftware.WinOS.MSTest.Extensions\IVSoftware.WinOS.MSTest.Extensions.csproj", "{16A88327-B33A-4D86-94FB-8D22D890554F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IVSoftware.WinOS.MSTest.Extensions.STA", "IVSoftware.WinOS.MSTest.Extensions.STA\IVSoftware.WinOS.MSTest.Extensions.STA.csproj", "{80A0B7CB-E605-4542-984B-CAD848DFFF94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBench.PublicContractWitness.MSTest", "TestBench.PublicContractWitness.MSTest\TestBench.PublicContractWitness.MSTest.csproj", "{8367724A-D5B3-4783-A38D-92359CEA3C59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBench.PublicContractLatest.MSTest", "TestBench.PublicContractLatest.MSTest\TestBench.PublicContractLatest.MSTest.csproj", "{5F8E7A73-08E7-9066-58C8-F058DC5E2F22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IVSoftware.Portable.Xml.Linq.XBoundObject", "..\IVSoftware.Portable.Xml.Linq.XBoundObject\IVSoftware.Portable.Xml.Linq.XBoundObject\IVSoftware.Portable.Xml.Linq.XBoundObject.csproj", "{F11B47B9-9796-E286-19CD-6BF62081FECA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +27,18 @@ Global
 		{80A0B7CB-E605-4542-984B-CAD848DFFF94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80A0B7CB-E605-4542-984B-CAD848DFFF94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80A0B7CB-E605-4542-984B-CAD848DFFF94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8367724A-D5B3-4783-A38D-92359CEA3C59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8367724A-D5B3-4783-A38D-92359CEA3C59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8367724A-D5B3-4783-A38D-92359CEA3C59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8367724A-D5B3-4783-A38D-92359CEA3C59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F8E7A73-08E7-9066-58C8-F058DC5E2F22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F8E7A73-08E7-9066-58C8-F058DC5E2F22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F8E7A73-08E7-9066-58C8-F058DC5E2F22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F8E7A73-08E7-9066-58C8-F058DC5E2F22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F11B47B9-9796-E286-19CD-6BF62081FECA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F11B47B9-9796-E286-19CD-6BF62081FECA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F11B47B9-9796-E286-19CD-6BF62081FECA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F11B47B9-9796-E286-19CD-6BF62081FECA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,4 @@
-## IVSoftware.WinOS.MSTest.Extensions
+## IVSoftware.WinOS.MSTest.Extensions [[GitHub]](https://github.com/IVSoftware/IVSoftware.WinOS.MSTest.Extensions.git)
 
 The **MSTest Clipboard Utilities** package is designed to enhance the testing workflow by providing three primary extension methods:
 
@@ -9,17 +9,28 @@ The **MSTest Clipboard Utilities** package is designed to enhance the testing wo
 Additionally, the package includes optional Visual Studio code snippets that streamline the process of generating test limits on the fly, allowing developers to dynamically craft and validate test assertions during debugging sessions.
 
 ---
+_**Version 2.0.0** introduces a breaking-change sentinel for public contract regression analysis._
+___
+
+### Table of Contents
+
+- [Clipboard](#clipboard) - Inline ad hoc test-limit generation for velocitized unit testing
+- [Breaking-Change Sentinel](./IVSoftware.WinOS.MSTest.Extensions/README/breaking-change-sentinel.md) - Public-contract witness, baseline, and breaking-change diff workflow
+
+---
 
 ### Critical Setup
 
 Before using this package, ensure the `.csproj` for your MSTest project is configured correctly. Modify your test project’s `.csproj` file to include the following properties:
 
+The important requirement is the `-windows` target, not a lock to a specific .NET release. In other words, keep your current framework line current, but add the Windows suffix as shown below.
+
 ```
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<!-- Critical configuration -->
-		<TargetFramework>net8.0-windows</TargetFramework>
+		<!-- Critical configuration: add '-windows' to the current framework target -->
+		<TargetFramework>net10.0-windows</TargetFramework>
 		<UseWindowsForms>True</UseWindowsForms>
 		<!-- Win32 and STA threading is now enabled for this test project -->
 	</PropertyGroup>
@@ -32,6 +43,9 @@ Without this configuration, the `ToClipboard()` and `ToClipboardAssert()` method
 ---
 
 ### Key Features
+
+### Clipboard
+
 
 #### 1. `ToClipboard()`
 The `ToClipboard()` method copies the **actual output** (e.g., a serialized JSON string) to the clipboard for immediate inspection. This raw output can be pasted into external tools such as Notepad, JSON validators, or directly into your testing environment for manual review.
